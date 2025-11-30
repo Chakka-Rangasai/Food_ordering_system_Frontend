@@ -1,0 +1,12 @@
+.footer a:hover {
+  color: #ffba08; /* highlight color on hover */
+}
+
+.footer i {
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+}
+
+.footer i:hover {
+  transform: scale(1.2);
+}

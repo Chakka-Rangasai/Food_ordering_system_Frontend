@@ -1,0 +1,175 @@
+/* Base styles (desktop first) */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Background wrapper */
+.page-background,
+.login-background,
+.register-background {
+  background: url('../../../assets/Images/RestaurantImage.jpg') no-repeat center center;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+/* Card styling */
+.card {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  max-width: 500px;
+  width: 75%;
+  min-height: 450px;
+  margin: 0 auto;
+}
+
+/* Card header */
+.card-header {
+  background: linear-gradient(90deg, #20c997, #6f42c1);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* Inputs */
+.form-floating .form-control {
+  border-radius: 8px;
+  background-color: #fdfdfd;
+}
+.form-floating .form-control:focus {
+  background-color: #fffaf0;
+  border-color: #20c997;
+  box-shadow: 0 0 0 0.2rem rgba(32, 201, 151, 0.25);
+}
+
+/* Buttons */
+.btn-primary, .btn-login {
+  background-color: #d6336c;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  padding: 10px 16px;
+  transition: background-color 0.3s ease;
+}
+.btn-primary:hover, .btn-login:hover {
+  background-color: #b02a50;
+}
+
+/* Alerts */
+.alert {
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+/* ------------------- RESPONSIVE MEDIA QUERIES ------------------- */
+
+/* Large tablets (≤ 992px) */
+@media (max-width: 992px) {
+  .card {
+    max-width: 420px;
+    min-height: 420px;
+  }
+  .card-header {
+    font-size: 1.2rem;
+  }
+}
+
+/* Small tablets & large phones (≤ 768px) */
+@media (max-width: 768px) {
+  .page-background,
+  .login-background,
+  .register-background {
+    flex-direction: column; /* stack vertically */
+    height: auto;
+    padding: 20px;
+  }
+  .card {
+    max-width: 100%;
+    min-height: 400px;
+    margin: 10px 0;
+  }
+  .card-header {
+    font-size: 1.1rem;
+  }
+  .btn-primary, .btn-login {
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
+
+/* Mobile phones (≤ 576px) */
+@media (max-width: 576px) {
+  .page-background,
+  .login-background,
+  .register-background {
+    padding: 10px;
+  }
+  .card {
+    max-width: 100%;
+    min-height: auto;
+    padding: 1rem;
+  }
+  .card-header {
+    font-size: 1rem;
+  }
+  .btn-primary, .btn-login {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+  .form-floating label {
+    font-size: 0.85rem;
+  }
+  .form-floating .form-control {
+    font-size: 0.9rem;
+  }
+}
+/* Forgot password link */
+.forgot-password-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #d6336c;              /* deep pink to match your button */
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.forgot-password-link:hover {
+  color: #b02a50;              /* darker pink on hover */
+  text-decoration: underline;  /* underline for clarity */
+  transform: translateY(-1px); /* subtle lift effect */
+}
+.create-account-link {
+  color: #0077b6;   /* royal blue */
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.create-account-link:hover {
+  color: #023e8a;   /* darker shade on hover */
+  text-decoration: underline;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .forgot-password-link {
+    display: block;            /* stack below input on smaller screens */
+    text-align: center;
+    margin-top: 12px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .forgot-password-link {
+    font-size: 0.85rem;
+    margin-top: 10px;
+  }
+}
+

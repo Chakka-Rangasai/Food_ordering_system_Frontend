@@ -1,1 +1,32 @@
-<p>header works!</p>
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+  <div class="container-fluid">
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold" routerLink="/">🍴 FoodieExpress</a>
+    <!-- Toggle button for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <!-- Links when NOT logged in -->
+        <ng-container *ngIf="!isLoggedIn">
+          <li class="nav-item"><a class="btn nav-btn mx-2" routerLink="/login">Login</a></li>
+          <li class="nav-item"><a class="btn nav-btn mx-2" routerLink="/register">Register</a></li>
+        </ng-container>
+
+        <!-- Links when logged in -->
+        <ng-container *ngIf="isLoggedIn">
+          <li class="nav-item"><a class="btn nav-btn mx-2" routerLink="/">Home</a></li>
+          <li class="nav-item"><a class="btn nav-btn mx-2" routerLink="/restaurants">Restaurants</a></li>
+          <li class="nav-item"><a class="btn nav-btn mx-2" routerLink="/orders">My Orders</a></li>
+          <li class="nav-item"><a class="btn nav-btn mx-2" routerLink="/track">Track Order</a></li>
+          <li class="nav-item"><a class="btn nav-btn mx-2" routerLink="/cart">Cart 🛒</a></li>
+        </ng-container>
+
+      </ul>
+    </div>
+  </div>
+</nav>

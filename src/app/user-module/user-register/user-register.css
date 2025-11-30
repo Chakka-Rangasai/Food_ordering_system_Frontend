@@ -1,0 +1,142 @@
+/* Full background split layout */
+.register-background {
+  display: flex;
+  height: 100vh;
+  background: url('../../../assets/Images/RestaurantImage.jpg') no-repeat center center;
+  background-size: cover;
+}
+
+/* Left side text */
+.register-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #03913c;
+  text-align: left;
+  padding: 3rem;
+}
+
+.overlay-text h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.overlay-text p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+/* Right side form */
+.register-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card overlay */
+.card {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Card header */
+.card-header {
+  background: linear-gradient(90deg, #20c997, #6f42c1);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* Inputs */
+.form-floating .form-control {
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+.form-floating .form-control:focus {
+  background-color: #fffaf0;
+  border-color: #20c997;
+  box-shadow: 0 0 0 0.2rem rgba(32, 201, 151, 0.25);
+}
+
+/* Button */
+.btn-primary {
+  background-color: #d6336c;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+}
+.btn-primary:hover {
+  background-color: #b02a50;
+}
+
+/* Alerts */
+.alert {
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+/* Validation text colors */
+.text-danger { color: #dc3545; }
+.text-warning { color: #fd7e14; }
+.text-info { color: #0dcaf0; }
+.text-primary { color: #6f42c1; }
+
+/* ------------------- RESPONSIVE MEDIA QUERIES ------------------- */
+
+/* Tablets (≤ 992px) */
+@media (max-width: 992px) {
+  .overlay-text h1 { font-size: 2rem; }
+  .overlay-text p { font-size: 1rem; }
+  .card { max-width: 450px; }
+}
+
+/* Small tablets & large phones (≤ 768px) */
+@media (max-width: 768px) {
+  .register-background {
+    flex-direction: column; /* stack text and form vertically */
+    height: auto;
+    padding: 20px;
+  }
+  .register-left {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  .overlay-text h1 { font-size: 1.8rem; }
+  .overlay-text p { font-size: 0.95rem; }
+  .register-right { margin-top: 20px; }
+  .card {
+    max-width: 100%;
+    min-height: 500px;
+  }
+}
+
+/* Mobile phones (≤ 576px) */
+@media (max-width: 576px) {
+  .register-background {
+    padding: 10px;
+  }
+  .overlay-text h1 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+  .overlay-text p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+  .card {
+    max-width: 100%;
+    padding: 1rem;
+    min-height: auto; /* let content define height */
+  }
+  .btn-primary {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}
