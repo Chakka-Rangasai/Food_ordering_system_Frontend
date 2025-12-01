@@ -5,7 +5,7 @@ import { Header } from '../../core/header/header';
 
 @Component({
   selector: 'app-landing',
-  imports: [CommonModule,FormsModule,Header],
+  imports: [CommonModule,FormsModule],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
 })

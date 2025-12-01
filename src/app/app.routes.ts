@@ -6,6 +6,8 @@ import { UserRegister } from './user-module/user-register/user-register';
 import { UserLogin } from './user-module/user-login/user-login';
 import { RestaurantList } from './restaurant-module/restaurant-list/restaurant-list';
 import { RestaurantMenuList } from './restaurant-module/restaurant-menu-list/restaurant-menu-list';
+import { Orders } from './order-module/orders/orders';
+import { Cart } from './order-module/cart/cart';
 
 export const routes: Routes = [
     { path:'',component:Landing},
@@ -14,5 +16,11 @@ export const routes: Routes = [
     { path:'restaurantlist',component:RestaurantList},
     {
         path:'restaurantdetails',component:RestaurantMenuList
+    },
+    {
+        path:'orders',component:Orders
+    },
+    {
+        path:'cart',component:Cart
     }
 ];
