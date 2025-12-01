@@ -6,10 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/users'; // replace with your backend URL
-
+  private apiUrl = 'http://localhost:8080/users'; 
   constructor(private http: HttpClient) {}
-
   registerUser(userData: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, userData);
   }

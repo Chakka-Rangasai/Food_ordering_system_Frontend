@@ -1,25 +1,23 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { UserLogin } from '../../user-module/user-login/user-login';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule,RouterLink],
+  standalone: true,
+  imports: [RouterLink,CommonModule],
   templateUrl: './header.html',
-  styleUrl: './header.css',
+  styleUrls: ['./header.css']
 })
 export class Header {
-   isLoggedIn: boolean = false; // default: not logged in
-
-  login() {
-    // In a real app, you'd call AuthService.login() here
-    this.isLoggedIn = true;
-    console.log('User logged in');
+  get isLoggedIn(): boolean {
+    return UserLogin.isLoggedIn; 
   }
 
   logout() {
-    // In a real app, you'd call AuthService.logout() here
-    this.isLoggedIn = false;
+    UserLogin.isLoggedIn = false; 
     console.log('User logged out');
   }
 }

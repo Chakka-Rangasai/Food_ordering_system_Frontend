@@ -1,14 +1,4 @@
 <div class="register-background">
-  <!-- Left side: Marketing text -->
-  <!-- <div class="register-left">
-    <div class="overlay-text">
-      <h1>🍕 Fresh Food, Fast Delivery</h1>
-      <p>Join FoodieExpress today and get your favorite meals delivered hot and fresh to your doorstep.</p>
-      <p>Trusted by thousands of happy customers across the city.</p>
-    </div>
-  </div> -->
-
-  <!-- Right side: Register form -->
   <div class="register-right">
     <div class="card shadow-lg border-0 rounded-3">
       <div class="card-header text-white text-center py-3">
@@ -16,7 +6,6 @@
       </div>
       <div class="card-body p-4">
         <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
-          <!-- Name -->
           <div class="form-floating mb-3">
             <input type="text" id="name" class="form-control"
                    formControlName="name" placeholder="Full Name">
@@ -26,8 +15,6 @@
               Name is required (min 3 characters).
             </div>
           </div>
-
-          <!-- Email -->
           <div class="form-floating mb-3">
             <input type="email" id="email" class="form-control"
                    formControlName="email" placeholder="Email">
@@ -41,8 +28,6 @@
               Please enter a valid email address.
             </div>
           </div>
-
-          <!-- Password -->
           <div class="form-floating mb-3">
             <input type="password" id="password" class="form-control"
                    formControlName="password" placeholder="Password">
@@ -60,8 +45,6 @@
               Must include uppercase, lowercase, number, and special character.
             </div>
           </div>
-
-          <!-- Confirm Password -->
           <div class="form-floating mb-3">
             <input type="password" id="confirmPassword" class="form-control"
                    formControlName="confirmPassword" placeholder="Confirm Password">
@@ -71,26 +54,20 @@
               Passwords do not match.
             </div>
           </div>
-
-          <!-- Submit -->
           <button type="submit" class="btn btn-primary w-100 py-2">
             Register
           </button>
         </form>
-
-        <!-- Success / Error messages -->
         <div *ngIf="successMessage" class="alert alert-success mt-3 text-center">
           {{ successMessage }}
         </div>
         <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
           {{ errorMessage }}
         </div>
-
-        <!-- Extra link -->
         <div class="text-center mt-3">
-          <small>Already have an account? 
-            <a routerLink="/login" class="text-primary fw-bold ">Login here</a>
-          </small>
+         <small>Already have an account? 
+         <a routerLink="/login" class="login-here-link">Login here</a>
+        </small>
         </div>
       </div>
     </div>
