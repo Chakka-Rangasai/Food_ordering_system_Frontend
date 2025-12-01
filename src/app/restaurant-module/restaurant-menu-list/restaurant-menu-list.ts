@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Restaurant } from '../../services/restaurant';
+
 import { CommonModule } from '@angular/common';
+import { Restaurant } from '../services/restaurant';
 
 @Component({
   selector: 'app-restaurant-menu-list',
