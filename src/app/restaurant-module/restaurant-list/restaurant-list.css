@@ -1,0 +1,27 @@
+/* Card hover and cursor enhancements */
+.card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer; /* shows pointer cursor */
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.02); /* slight lift + zoom */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); /* deeper shadow */
+}
+
+/* Add subtle hover effect for pagination links */
+.page-link {
+  transition: background-color 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.page-link:hover {
+  background-color: #198754; /* Bootstrap green */
+  color: #fff;
+}
+
+/* Search bar focus effect */
+.input-group .form-control:focus {
+  border-color: #198754;
+  box-shadow: 0 0 6px rgba(25, 135, 84, 0.5);
+}

@@ -1,1 +1,69 @@
-<p>restaurant-list works!</p>
+<div class="container mt-4">
+  <!-- Search + Toggle Row -->
+  <div class="row mb-3 g-2">
+    <!-- Search Bar -->
+    <div class="col-12 col-md-9">
+      <div class="input-group">
+        <span class="input-group-text">🔍</span>
+        <input type="text" class="form-control" placeholder="Search restaurants..."
+               [(ngModel)]="searchText" />
+      </div>
+    </div>
+
+    <!-- Veg/Non-Veg Toggle -->
+    <div class="col-12 col-md-3 d-flex justify-content-md-end">
+      <div class="btn-group w-100" role="group">
+        <input type="radio" class="btn-check" name="foodType" id="veg" value="veg"
+               [(ngModel)]="selectedFoodType">
+        <label class="btn btn-outline-success" for="veg">Veg</label>
+
+        <input type="radio" class="btn-check" name="foodType" id="nonveg" value="nonveg"
+               [(ngModel)]="selectedFoodType">
+        <label class="btn btn-outline-danger" for="nonveg">Non-Veg</label>
+
+        <input type="radio" class="btn-check" name="foodType" id="both" value="both"
+               [(ngModel)]="selectedFoodType">
+        <label class="btn btn-outline-primary" for="both">Both</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Restaurant Cards -->
+  <div class="row">
+    @for (restaurant of paginatedRestaurants; track restaurant.id) {
+      <div class="col-12 col-sm-6 col-md-4 mb-3">
+        <div class="card h-100 shadow-sm" (click)="viewDetails(restaurant)">
+          <div class="card-body text-center">
+            <h5 class="card-title fw-bold">{{ restaurant.name }}</h5>
+            <p class="card-text text-muted">📍 {{ restaurant.address }}</p>
+
+            <!-- Rating + Delivery Time together -->
+            <span class="badge bg-success me-2">
+              ⭐ {{ restaurant.rating }}
+            </span>
+            <span class="text-primary">
+              ⏱️ {{ restaurant.deliveryTime }}
+            </span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Pagination -->
+  @if (totalPages > 1) {
+    <nav>
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="prevPage()">Previous</a>
+        </li>
+        <li class="page-item disabled">
+          <span class="page-link">Page {{ currentPage }} of {{ totalPages }}</span>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="nextPage()">Next</a>
+        </li>
+      </ul>
+    </nav>
+  }
+</div>

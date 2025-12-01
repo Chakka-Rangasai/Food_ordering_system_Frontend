@@ -1,1 +1,118 @@
-<p>landing works!</p>
+<!-- <app-header></app-header>
+<section class="hero text-center text-white">
+  <h1 class="display-4 fw-bold">Delicious Food Delivered Fast</h1>
+  <p class="lead">Order from your favorite restaurants in just a few clicks.</p>
+  <button class="btn btn-warning btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#orderModal">
+    <i class="bi bi-bag-fill"></i> Start Ordering
+  </button>
+</section>
+
+<section class="container">
+  <h2 class="text-center ">Popular Categories</h2>
+  <div class="row g-4">
+    <div class="col-md-4" *ngFor="let cat of categories">
+      <div class="card shadow-sm">
+        <img [src]="cat.image" class="card-img-top" [alt]="cat.name">
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ cat.name }}</h5>
+          <button class="btn btn-outline-danger btn-sm">Order Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+<div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Quick Order</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Select your favorite dishes from the categories above and enjoy fast delivery!</p>
+        <button class="btn btn-success w-100" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<!-- Hero Section -->
+<section class="hero text-center text-white mb-0">
+  <h1 class="display-4 fw-bold mb-2">Delicious Food Delivered Fast</h1>
+  <p class="lead mb-3">Order from your favorite restaurants in just a few clicks.</p>
+  <button class="btn btn-warning btn-lg mt-2" data-bs-toggle="modal" data-bs-target="#orderModal">
+    <i class="bi bi-bag-fill"></i> Start Ordering
+  </button>
+</section>
+
+<!-- Popular Categories -->
+<section class="container pt-0 mt-0">
+  <h2 class="text-center mb-3">Popular Categories</h2>
+  <div class="row g-4">
+    <div class="col-md-4" *ngFor="let cat of categories">
+      <div class="card shadow-sm">
+        <img [src]="cat.image" class="card-img-top" [alt]="cat.name">
+        <div class="card-body text-center">
+          <h5 class="card-title mb-2">{{ cat.name }}</h5>
+          <button class="btn btn-outline-danger btn-sm">Order Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal without form -->
+<div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Quick Order</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Select your favorite dishes from the categories above and enjoy fast delivery!</p>
+        <button class="btn btn-success w-100" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<section class="reviews-section  py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4">Our Reviews</h2>
+
+    <div class="reviews-marquee ">
+      <!-- Track: duplicate items once for seamless loop -->
+      <div class="reviews-track d-inline-flex gap-3 px-2">
+        <!-- SET 1 -->
+        <div class="review-box">
+          <p><strong>Aarav S.</strong><br>🍕 Hot and fresh pizza delivered in under 20 minutes. Great packaging!</p>
+        </div>
+        <div class="review-box">
+          <p><strong>Neha P.</strong><br>🍔 Loved the burger combo. Easy checkout and awesome deals.</p>
+        </div>
+        <div class="review-box">
+          <p><strong>Rohan K.</strong><br>🍣 Sushi was fresh and neatly packed. Tracking was accurate.</p>
+        </div>
+        <div class="review-box">
+          <p><strong>Priya D.</strong><br>🥗 Custom salad was perfect. On-time delivery and polite rider.</p>
+        </div>
+        <div class="review-box">
+          <p><strong>Aditya V.</strong><br>🍜 Great restaurant variety. App UI is clean and fast.</p>
+        </div>
+        <div class="review-box">
+          <p><strong>Sneha K.</strong><br>🧁 Desserts arrived perfectly chilled. Will order again!</p>
+        </div>
+        <div class="review-box">
+          <p><strong>Meena L.</strong><br>🍛 Biryani was flavorful and still hot. Super quick delivery.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

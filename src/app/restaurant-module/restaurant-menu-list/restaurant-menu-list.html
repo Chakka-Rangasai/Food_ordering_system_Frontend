@@ -1,1 +1,92 @@
-<p>restaurant-menu-list works!</p>
+<div class="container mt-4">
+  <!-- Restaurant Info -->
+  <div class="row mb-3">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title">{{ restaurant?.name }}</h3>
+          <p class="card-text">📍 {{ restaurant?.address }}</p>
+          <p class="card-text"><strong>⏱️ Delivery:</strong> {{ restaurant?.deliveryTime }}</p>
+          <p class="card-text"><strong>🍴 Type:</strong> {{ restaurant?.foodType }}</p>
+          <p class="card-text">
+            <strong>⭐ Rating:</strong>
+            <span class="badge bg-success ms-2">{{ restaurant?.rating }}</span>
+          </p>
+          <p class="card-text text-muted">{{ restaurant?.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Veg / NonVeg + Dropdown Filters in one row -->
+<div class="row mb-3">
+  <div class="col-12 d-flex justify-content-center align-items-center gap-3">
+    
+    <!-- Veg/NonVeg buttons -->
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-success" (click)="filterByType('Veg')">Veg</button>
+      <button type="button" class="btn btn-outline-danger" (click)="filterByType('NonVeg')">Non-Veg</button>
+    </div>
+
+    <!-- Dropdown filters -->
+    <div class="dropdown">
+      <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterMenuButton"
+              data-bs-toggle="dropdown" aria-expanded="false">
+        Filter Menu
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="filterMenuButton">
+        <!-- Price Filters -->
+        <li><button class="dropdown-item" (click)="filterByPrice('low')">Price: Low (₹0 - ₹100)</button></li>
+        <li><button class="dropdown-item" (click)="filterByPrice('medium')">Price: Medium (₹101 - ₹250)</button></li>
+        <li><button class="dropdown-item" (click)="filterByPrice('high')">Price: High (₹251+)</button></li>
+        <li><hr class="dropdown-divider"></li>
+        <!-- Rating Filters -->
+        <li><button class="dropdown-item" (click)="filterByRating(4.5)">Rating: 4.5+</button></li>
+        <li><button class="dropdown-item" (click)="filterByRating(3.5)">Rating: 3.5+</button></li>
+        <li><hr class="dropdown-divider"></li>
+        <!-- Reset -->
+        <li><button class="dropdown-item" (click)="resetFilter()">Show All</button></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- Menu List -->
+<div class="row">
+  <!-- Show menu items if any -->
+  <div *ngFor="let item of filteredMenu; trackBy: trackById" class="col-12 col-sm-6 col-lg-4 mb-3">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body text-center">
+        <h5 class="card-title">{{ item.name }}</h5>
+
+        <p class="card-text">
+          <span class="badge bg-success ms-2" *ngIf="item.foodType === 'Veg'">Veg</span>
+          <span class="badge bg-danger ms-2" *ngIf="item.foodType === 'NonVeg'">Non-Veg</span>
+          <span class="badge bg-success ms-2">⭐ {{ item.rating }}</span>
+        </p>
+
+        <p class="card-text fw-bold fs-5">₹{{ item.price }}</p>
+
+        <div class="d-flex justify-content-center align-items-center mb-2">
+          <button class="btn btn-sm btn-outline-secondary" (click)="decreaseQuantity(item)">-</button>
+          <span class="mx-2">{{ item.quantity || 0 }}</span>
+          <button class="btn btn-sm btn-outline-secondary" (click)="increaseQuantity(item)">+</button>
+        </div>
+
+        <button class="btn btn-primary w-100" (click)="addToCart(item)">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Show "Not Found" if no items -->
+  <div *ngIf="filteredMenu.length === 0" class="col-12">
+    <div class="alert alert-warning text-center">
+      🚫 No items found matching your filter criteria.
+      To see All menu go to filters and click see All
+    </div>
+  </div>
+</div>
+
