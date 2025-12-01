@@ -1,27 +1,69 @@
-
-/* New color theme */
-.bg-food {
-  background-color: #FFEBEE; /* Light pink for a fresh food vibe */
-}
-
-.text-food-primary {
-  color: #C62828 !important; /* Deep red for brand and links */
-}
-
-/* Hover effect for links */
-.navbar-nav .nav-link:hover {
-  color: #B71C1C !important; /* Darker red on hover */
-}
-
-/* Increase navbar height */
-.navbar {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  font-size: 1.1rem; /* Slightly bigger text */
+/* Navbar gradient background */
+.custom-navbar {
+  background: linear-gradient(90deg, #e63946, #d90429); /* bold red gradient */
+  padding: 0.5rem 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
 /* Brand styling */
 .navbar-brand {
   font-size: 1.6rem;
-  font-weight: bold;
+  letter-spacing: 1px;
+  color: #fff !important;
+  transition: transform 0.3s ease;
+}
+.navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+/* Unified button style */
+.nav-btn {
+  background-color: #f77f00;   /* warm orange tone */
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 25px;
+  padding: 6px 18px;
+  margin: 0 4px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.nav-btn:hover {
+  background-color: #1888a4;   /* lighter golden orange */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+}
+
+/* Active link style */
+.nav-btn.active, .nav-btn:focus {
+  background-color: #d90429; /* deep red for active state */
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+/* Profile image styling */
+.dropdown img {
+  cursor: pointer;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  transition: transform 0.2s ease, border-color 0.3s ease;
+}
+.dropdown img:hover {
+  transform: scale(1.1);
+  border-color: #ffba08;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .custom-navbar {
+    background: linear-gradient(90deg, #343a40, #495057); /* dark gradient for mobile */
+  }
+  .nav-btn {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    text-align: center;
+  }
 }
