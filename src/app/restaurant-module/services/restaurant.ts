@@ -5,29 +5,28 @@ import { Injectable } from '@angular/core';
 })
 export class Restaurant {
   restaurants = [
- {
-  id: 1,
-  name: "Spice Garden",
-  rating: 4.5,
-  address: "MG Road, Pune",
-  deliveryTime: "30-40 mins",
-  foodType: "veg",
-  description: "A cozy vegetarian restaurant serving authentic Indian flavors with quick delivery.",
- "menu": [
-  { "id": 101, "name": "Paneer Butter Masala", "price": 250, "foodType": "Veg", "rating": 4.6 },
-  { "id": 102, "name": "Veg Biryani", "price": 200, "foodType": "Veg", "rating": 4.4 },
-  { "id": 103, "name": "Butter Naan", "price": 40, "foodType": "Veg", "rating": 4.3 },
-  { "id": 104, "name": "Dal Tadka", "price": 180, "foodType": "Veg", "rating": 4.5 },
-  { "id": 105, "name": "Chicken Curry", "price": 280, "foodType": "NonVeg", "rating": 4.2 },
-  { "id": 106, "name": "Jeera Rice", "price": 120, "foodType": "Veg", "rating": 4.1 },
-  { "id": 107, "name": "Gulab Jamun", "price": 90, "foodType": "Veg", "rating": 4.7 },
-  { "id": 108, "name": "Fish Fry", "price": 300, "foodType": "NonVeg", "rating": 4.5 },
-  { "id": 109, "name": "Mix Veg Curry", "price": 220, "foodType": "Veg", "rating": 4.2 },
-  { "id": 110, "name": "Mutton Biryani", "price": 350, "foodType": "NonVeg", "rating": 4.6 },
-  { "id": 111, "name": "Jeera Rice", "price": 120, "foodType": "Veg", "rating": 4.1 }
-]
-
-},
+{
+  "id": 1,
+  "name": "Spice Garden",
+  "rating": 4.5,
+  "address": "MG Road, Pune",
+  "deliveryTime": "30-40 mins",
+  "foodType": "veg",
+  "description": "A cozy vegetarian restaurant serving authentic Indian flavors with quick delivery.",
+  "menu": [
+    { "id": 101, "name": "Paneer Butter Masala", "price": 250, "foodType": "Veg", "rating": 4.6, "image": "https://images.unsplash.com/photo-1708793873401-e8c6c153b76a" },
+    { "id": 102, "name": "Veg Biryani", "price": 200, "foodType": "Veg", "rating": 4.4, "image": "https://images.unsplash.com/photo-1630409346824-4f0e7b080087" },
+    { "id": 103, "name": "Butter Naan", "price": 40, "foodType": "Veg", "rating": 4.3, "image": "https://images.unsplash.com/photo-1599232288126-7dbd2127db14" },
+    { "id": 104, "name": "Dal Tadka", "price": 180, "foodType": "Veg", "rating": 4.5, "image": "https://images.unsplash.com/photo-1626500155537-93690c24099e" },
+    { "id": 105, "name": "Chicken Curry", "price": 280, "foodType": "NonVeg", "rating": 4.2, "image": "https://images.unsplash.com/photo-1631292784640-2b24be784d5d" },
+    { "id": 106, "name": "Jeera Rice", "price": 120, "foodType": "Veg", "rating": 4.1, "image": "https://images.unsplash.com/photo-1733414717515-d997dafb7341" },
+    { "id": 107, "name": "Gulab Jamun", "price": 90, "foodType": "Veg", "rating": 4.7, "image": "https://images.unsplash.com/photo-1666190092159-3171cf0fbb12" },
+    { "id": 108, "name": "Fish Fry", "price": 300, "foodType": "NonVeg", "rating": 4.5, "image": "https://images.unsplash.com/photo-1656389863341-1dfd38ee6edc" },
+    { "id": 109, "name": "Mix Veg Curry", "price": 220, "foodType": "Veg", "rating": 4.2, "image": "https://images.unsplash.com/photo-1716959669858-11d415bdead6" },
+    { "id": 110, "name": "Mutton Biryani", "price": 350, "foodType": "NonVeg", "rating": 4.6, "image": "https://images.unsplash.com/photo-1696265350630-efa107c33990" }
+  ]
+}
+,
   {
     id: 2,
     name: 'Ocean Breeze',

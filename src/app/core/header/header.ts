@@ -3,21 +3,23 @@ import { RouterLink } from '@angular/router';
 import { UserLogin } from '../../user-module/user-login/user-login';
 import { CommonModule } from '@angular/common';
 
-
 @Component({
   selector: 'app-header',
-  standalone: true,
-  imports: [RouterLink,CommonModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './header.html',
   styleUrls: ['./header.css']
 })
 export class Header {
+  cartCount = 0;
+
   get isLoggedIn(): boolean {
-    return UserLogin.isLoggedIn; 
+    // Always check localStorage so state persists across refresh
+    return localStorage.getItem('isLoggedIn') === 'true';
   }
 
   logout() {
-    UserLogin.isLoggedIn = false; 
+    UserLogin.isLoggedIn = false;
+    localStorage.removeItem('isLoggedIn'); // clear login state
     console.log('User logged out');
   }
 }

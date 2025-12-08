@@ -52,28 +52,41 @@
   </div>
 </div>
 
-<!-- Menu List -->
+
+
 <div class="row">
   <!-- Show menu items if any -->
   <div *ngFor="let item of filteredMenu; trackBy: trackById" class="col-12 col-sm-6 col-lg-4 mb-3">
     <div class="card h-100 shadow-sm">
+      
+      <!-- Food Image -->
+      <img [src]="item.image" alt="{{ item.name }}" class="card-img-top food-img">
+
       <div class="card-body text-center">
-        <h5 class="card-title">{{ item.name }}</h5>
+        <!-- Row with food type, name, and rating -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <!-- Food type badge -->
+          <span class="badge bg-success" *ngIf="item.foodType === 'Veg'">Veg</span>
+          <span class="badge bg-danger" *ngIf="item.foodType === 'NonVeg'">Non-Veg</span>
 
-        <p class="card-text">
-          <span class="badge bg-success ms-2" *ngIf="item.foodType === 'Veg'">Veg</span>
-          <span class="badge bg-danger ms-2" *ngIf="item.foodType === 'NonVeg'">Non-Veg</span>
-          <span class="badge bg-success ms-2">⭐ {{ item.rating }}</span>
-        </p>
+          <!-- Food name -->
+          <h5 class="card-title mb-0 flex-grow-1 text-center">{{ item.name }}</h5>
 
-        <p class="card-text fw-bold fs-5">₹{{ item.price }}</p>
+          <!-- Rating badge (green) -->
+          <span class="badge bg-success">⭐ {{ item.rating }}</span>
+        </div>
 
+        <!-- Price -->
+        <p class="card-text fw-bold fs-4">₹{{ item.price }}</p>
+
+        <!-- Quantity Selector -->
         <div class="d-flex justify-content-center align-items-center mb-2">
           <button class="btn btn-sm btn-outline-secondary" (click)="decreaseQuantity(item)">-</button>
           <span class="mx-2">{{ item.quantity || 0 }}</span>
           <button class="btn btn-sm btn-outline-secondary" (click)="increaseQuantity(item)">+</button>
         </div>
 
+        <!-- Add to Cart -->
         <button class="btn btn-primary w-100" (click)="addToCart(item)">
           Add to Cart
         </button>

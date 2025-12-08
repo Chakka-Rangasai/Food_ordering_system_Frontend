@@ -27,25 +27,38 @@ export class UserLogin {
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).+$/)
       ]]
     });
+
+    // Restore login state from localStorage
+    const storedLogin = localStorage.getItem('isLoggedIn');
+    UserLogin.isLoggedIn = storedLogin === 'true';
   }
+
   onSubmit() {
     this.submitted = true;
     if (this.loginForm.invalid) return;
+
     const { email, password } = this.loginForm.value;
-    const hardcodedEmail = 'jujarurajdeep@gmail.com';
-    const hardcodedPassword = 'Rajdeep@8106';
+    const hardcodedEmail = 'yamini@gmail.com';
+    const hardcodedPassword = 'Yamini@1234';
 
     if (email === hardcodedEmail && password === hardcodedPassword) {
       this.successMessage = 'Login successful!';
       this.errorMessage = '';
       UserLogin.isLoggedIn = true;
+
+      // Save login state in localStorage
+      localStorage.setItem('isLoggedIn', 'true');
+
       setTimeout(() => {
         this.router.navigate(['/restaurantlist']);
       }, 1000);
     } else {
       this.errorMessage = 'Login failed. Please check your credentials.';
       this.successMessage = '';
-      UserLogin.isLoggedIn = false; 
+      UserLogin.isLoggedIn = false;
+
+      // Clear login state
+      localStorage.removeItem('isLoggedIn');
     }
   }
 }

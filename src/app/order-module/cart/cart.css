@@ -1,0 +1,60 @@
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.fs-5 {
+  font-size: 1.4rem !important;
+}
+
+.list-group-item {
+  font-size: 0.95rem;
+}
+
+@media (max-width: 576px) {
+  .card-title {
+    font-size: 1rem;
+  }
+  .fs-5 {
+    font-size: 1.2rem !important;
+  }
+}
+.card {
+  border-radius: 12px;
+}
+
+.card-title {
+  font-size: 1.2rem;
+}
+
+.form-control {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 6px rgba(13, 110, 253, 0.4);
+}
+
+.list-group-item {
+  font-size: 0.95rem;
+}
+
+hr {
+  border-top: 2px solid #ddd;
+  opacity: 0.8;
+}
+
+.btn-gradient {
+  background: linear-gradient(90deg, #0d6efd, #6610f2);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.btn-gradient:hover {
+  transform: scale(1.03);
+  background: linear-gradient(90deg, #6610f2, #0d6efd);
+}

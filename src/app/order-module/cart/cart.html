@@ -1,1 +1,109 @@
-<p>cart works!</p>
+<div class="container mt-4">
+  <h2 class="mb-3">🛒 My Cart</h2>
+
+  @if (cartItems.length > 0) {
+    <div class="row">
+      <!-- Cart items -->
+      <div class="col-12 col-md-8">
+        <div class="row">
+          @for (item of cartItems; track item.itemId) {
+            <div class="col-12 col-md-6 mb-3">
+              <div class="card shadow-sm h-100">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.name }}</h5>
+                  <p class="card-text">
+                    @if (item.foodType === 'Veg') {
+                      <span class="badge bg-success">Veg</span>
+                    } @else if (item.foodType === 'NonVeg') {
+                      <span class="badge bg-danger">Non-Veg</span>
+                    }
+                  </p>
+                  <p class="fw-bold fs-5">₹{{ item.price }}</p>
+                  
+                  <div class="d-flex align-items-center mb-2">
+                    <button class="btn btn-sm btn-outline-secondary" (click)="updateQuantity(item, -1)">-</button>
+                    <span class="mx-2">{{ item.quantity }}</span>
+                    <button class="btn btn-sm btn-outline-secondary" (click)="updateQuantity(item, 1)">+</button>
+                  </div>
+
+                  <button class="btn btn-danger w-100" (click)="removeItem(item.itemId)">
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="col-12 col-md-4">
+        <div class="card shadow-sm border-0 rounded-3">
+          <div class="card-body">
+
+            <!-- Delivery Address -->
+            <h6 class="mt-3 fw-bold text-primary">
+              <i class="bi bi-geo-alt-fill me-2"></i> Delivery Address
+            </h6>
+            <form>
+              <div class="mb-2">
+                <input type="text" class="form-control" placeholder="Full Name" [(ngModel)]="deliveryAddress.name" name="name">
+              </div>
+              <div class="mb-2">
+                <input type="text" class="form-control" placeholder="Phone Number" [(ngModel)]="deliveryAddress.phone" name="phone">
+              </div>
+              <div class="mb-2">
+                <input type="text" class="form-control" placeholder="Street Address" [(ngModel)]="deliveryAddress.street" name="street">
+              </div>
+              <div class="mb-2">
+                <input type="text" class="form-control" placeholder="Pincode" [(ngModel)]="deliveryAddress.pincode" name="pincode">
+              </div>
+            </form>
+
+            <!-- Divider -->
+            <hr class="my-3">
+
+            <!-- Order Summary -->
+            <h5 class="card-title fw-bold text-success">
+              <i class="bi bi-receipt-cutoff me-2"></i> Summary
+            </h5>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Items Cost</span>
+                <span>₹{{ getItemsCost() }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Delivery Fee</span>
+                <span>₹{{ deliveryFee }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Packing Cost</span>
+                <span>₹{{ packingCost }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>GST (4%)</span>
+                <span>₹{{ getGST() | number:'1.0-0' }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between fw-bold bg-light">
+                <span>Total</span>
+                <span class="text-success">₹{{ getGrandTotal() | number:'1.0-0' }}</span>
+              </li>
+            </ul>
+
+            <!-- Divider -->
+            <hr class="my-3">
+
+            <!-- Place Order Button -->
+            <button class="btn btn-gradient w-100 mt-3 fw-bold py-2" (click)="placeOrder()">
+              <i class="bi bi-cart-check-fill me-2"></i> Place Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="alert alert-warning text-center">
+      🚫 Your cart is empty.
+    </div>
+  }
+</div>
