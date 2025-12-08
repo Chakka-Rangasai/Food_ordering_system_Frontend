@@ -4,30 +4,24 @@
   background-size: cover;
   min-height: 100vh;
   display: flex;
-  align-items: center;   /* vertical center */
-  justify-content: center; /* horizontal center */
+  align-items: center;   
+  justify-content: center; 
   padding: 20px;
 }
-
-/* Card styling */
 .card {
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-  max-width: 500px;
+  max-width: 380px;  
   width: 100%;
-  min-height: 450px;
+  min-height: 450px; 
   margin: 0 auto;
 }
-
-/* Card header */
 .card-header {
   background: linear-gradient(90deg, #ff6f61, #9d4edd);
   font-size: 1.3rem;
   font-weight: 600;
 }
-
-/* Inputs */
 .form-floating .form-control {
   border-radius: 8px;
   background-color: #fdfdfd;
@@ -37,35 +31,27 @@
   border-color: #20c997;
   box-shadow: 0 0 0 0.2rem rgba(32, 201, 151, 0.25);
 }
-
-/* Login button */
 .btn-login {
   background-color: #ff6f61;
   color: #fff;
   border: none;
   border-radius: 25px;
   font-weight: 600;
-  padding: 10px;
+  padding: 12px; /* slightly taller button */
   transition: background-color 0.3s ease;
 }
 .btn-login:hover {
   background-color: #e85c50;
 }
-
-/* Alerts */
 .alert {
   border-radius: 8px;
   font-size: 0.95rem;
 }
-
-/* Validation colors */
 .msg-red { color: #e63946; }
 .msg-orange { color: #ff7f11; }
 .msg-purple { color: #9d4edd; }
 .msg-pink { color: #ff4d6d; }
 .msg-gray { color: #6c757d; }
-
-/* Forgot password link */
 .forgot-password-link {
   display: inline-block;
   margin-top: 8px;
@@ -80,8 +66,6 @@
   text-decoration: underline;
   transform: translateY(-1px);
 }
-
-/* Create account link */
 .create-account-link {
   color: #0077b6;
   font-weight: 600;
@@ -92,21 +76,16 @@
   color: #023e8a;
   text-decoration: underline;
 }
-
-/* ------------------- RESPONSIVE MEDIA QUERIES ------------------- */
-
-/* Tablets (≤ 992px) */
 @media (max-width: 992px) {
   .card {
-    max-width: 420px;
-    min-height: 420px;
+    max-width: 340px;   
+    min-height: 500px;  
   }
   .card-header {
     font-size: 1.2rem;
   }
 }
 
-/* Small tablets & large phones (≤ 768px) */
 @media (max-width: 768px) {
   .login-background {
     flex-direction: column;
@@ -115,7 +94,7 @@
   }
   .card {
     max-width: 100%;
-    min-height: 400px;
+    min-height: 480px;  /* taller */
     margin: 10px 0;
   }
   .card-header {
@@ -123,7 +102,7 @@
   }
   .btn-login {
     font-size: 1rem;
-    padding: 10px;
+    padding: 12px;
   }
 }
 
@@ -134,7 +113,7 @@
   }
   .card {
     max-width: 100%;
-    min-height: auto;
+    min-height: 460px;  /* taller */
     padding: 1rem;
   }
   .card-header {
@@ -142,7 +121,7 @@
   }
   .btn-login {
     font-size: 0.9rem;
-    padding: 8px 12px;
+    padding: 10px 12px;
   }
   .form-floating label {
     font-size: 0.85rem;

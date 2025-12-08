@@ -38,8 +38,8 @@ export class UserLogin {
     if (this.loginForm.invalid) return;
 
     const { email, password } = this.loginForm.value;
-    const hardcodedEmail = 'yamini@gmail.com';
-    const hardcodedPassword = 'Yamini@1234';
+    const hardcodedEmail = 'jujarurajdeep@gmail.com';
+    const hardcodedPassword = 'Rajdeep@8106';
 
     if (email === hardcodedEmail && password === hardcodedPassword) {
       this.successMessage = 'Login successful!';
@@ -48,10 +48,8 @@ export class UserLogin {
 
       // Save login state in localStorage
       localStorage.setItem('isLoggedIn', 'true');
-
-      setTimeout(() => {
         this.router.navigate(['/restaurantlist']);
-      }, 1000);
+      ;
     } else {
       this.errorMessage = 'Login failed. Please check your credentials.';
       this.successMessage = '';

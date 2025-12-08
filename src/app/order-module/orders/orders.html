@@ -1,6 +1,6 @@
 <div class="orders-container">
   <h2 class="section-title">My Orders</h2>
- 
+
   @for (group of groupedOrders; track group.restaurantId) {
     <div class="restaurant-card">
       <div class="restaurant-header" (click)="toggleRestaurant(group.restaurantId)">
@@ -8,10 +8,12 @@
           <!-- Show Order ID -->
           <h4 class="restaurant-name">Order ID: {{ group.orderId }}</h4>
           <p class="order-count">{{ group.orders.length }} items</p>
+          <!-- Show order date/time once per group -->
+          <p class="order-date">📅 {{ group.orders[0].dateTime | date:'medium' }}</p>
         </div>
         <div class="order-status">
-          <!-- Status shown once per order -->
-          <span class="badge status">Placed</span>
+          <!-- Styled status button -->
+          <button class="status-btn">Placed</button>
         </div>
         <button class="toggle-btn">
           @if (expandedRestaurant === group.restaurantId) {
@@ -21,7 +23,7 @@
           }
         </button>
       </div>
- 
+
       @if (expandedRestaurant === group.restaurantId) {
         <div class="order-list">
           @for (order of group.orders; track order.orderId) {
@@ -31,7 +33,6 @@
                 <p class="order-meta">
                   Qty: {{ order.quantity }} • ₹{{ order.price * order.quantity }}
                 </p>
-                <p class="order-date">📅 {{ order.dateTime | date:'medium' }}</p>
               </div>
               <div class="order-right">
                 <span class="badge food-type"
