@@ -11,20 +11,15 @@ import { UserLogin } from '../../user-module/user-login/user-login';
   styleUrls: ['./header.css']
 })
 export class Header {
-  cartCount = 0;
-
   get isLoggedIn(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';
   }
-
-  // Brand link changes depending on login state
   get brandLink(): string {
     return this.isLoggedIn ? '/restaurantlist' : '/';
   }
-
   logout() {
     UserLogin.isLoggedIn = false;
-    localStorage.setItem('isLoggedIn', 'false'); // keep consistent
+    localStorage.setItem('isLoggedIn', 'false'); 
     console.log('User logged out');
   }
 }

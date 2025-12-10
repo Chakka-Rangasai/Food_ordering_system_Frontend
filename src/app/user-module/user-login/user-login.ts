@@ -12,12 +12,10 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class UserLogin {
   static isLoggedIn: boolean = false;
-
   loginForm: FormGroup;
   submitted = false;
   successMessage = '';
   errorMessage = '';
-
   constructor(private fb: FormBuilder, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -27,12 +25,9 @@ export class UserLogin {
         Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&]).+$/)
       ]]
     });
-
-    // Restore login state from localStorage
     const storedLogin = localStorage.getItem('isLoggedIn');
     UserLogin.isLoggedIn = storedLogin === 'true';
   }
-
   onSubmit() {
     this.submitted = true;
     if (this.loginForm.invalid) return;
@@ -40,13 +35,10 @@ export class UserLogin {
     const { email, password } = this.loginForm.value;
     const hardcodedEmail = 'jujarurajdeep@gmail.com';
     const hardcodedPassword = 'Rajdeep@8106';
-
     if (email === hardcodedEmail && password === hardcodedPassword) {
       this.successMessage = 'Login successful!';
       this.errorMessage = '';
       UserLogin.isLoggedIn = true;
-
-      // Save login state in localStorage
       localStorage.setItem('isLoggedIn', 'true');
         this.router.navigate(['/restaurantlist']);
       ;
@@ -54,8 +46,6 @@ export class UserLogin {
       this.errorMessage = 'Login failed. Please check your credentials.';
       this.successMessage = '';
       UserLogin.isLoggedIn = false;
-
-      // Clear login state
       localStorage.removeItem('isLoggedIn');
     }
   }
