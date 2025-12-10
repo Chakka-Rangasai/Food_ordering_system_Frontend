@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { UserLogin } from '../../user-module/user-login/user-login';
 import { CommonModule } from '@angular/common';
+import { UserLogin } from '../../user-module/user-login/user-login';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [RouterLink, CommonModule],
   templateUrl: './header.html',
   styleUrls: ['./header.css']
@@ -13,13 +14,17 @@ export class Header {
   cartCount = 0;
 
   get isLoggedIn(): boolean {
-    // Always check localStorage so state persists across refresh
     return localStorage.getItem('isLoggedIn') === 'true';
+  }
+
+  // Brand link changes depending on login state
+  get brandLink(): string {
+    return this.isLoggedIn ? '/restaurantlist' : '/';
   }
 
   logout() {
     UserLogin.isLoggedIn = false;
-    localStorage.removeItem('isLoggedIn'); // clear login state
+    localStorage.setItem('isLoggedIn', 'false'); // keep consistent
     console.log('User logged out');
   }
 }

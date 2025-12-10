@@ -58,7 +58,7 @@
 /* Responsive tweaks */
 @media (max-width: 768px) {
   .custom-navbar {
-    background: linear-gradient(90deg, #343a40, #495057); /* dark gradient for mobile */
+    background: linear-gradient(90deg, #e63946, #d90429);
   }
   .nav-btn {
     display: block;

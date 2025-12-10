@@ -1,35 +1,53 @@
 <footer class="footer mt-auto py-4 bg-dark text-light">
   <div class="container">
     <div class="row">
+      <!-- Brand & Social -->
       <div class="col-md-4 mb-3">
         <h5 class="fw-bold">🍴 FoodieExpress</h5>
         <p class="small">
           Delivering happiness one meal at a time. Fresh, fast, and delicious!
         </p>
-         <a href="https://facebook.com" target="_blank" class="text-light me-3">
-         <i class="bi bi-facebook"></i></a>
+        <a href="https://facebook.com" target="_blank" class="text-light me-3">
+          <i class="bi bi-facebook"></i>
+        </a>
         <a href="https://instagram.com" target="_blank" class="text-light me-3">
-        <i class="bi bi-instagram"></i></a>
+          <i class="bi bi-instagram"></i>
+        </a>
         <a href="https://twitter.com" target="_blank" class="text-light me-3">
-        <i class="bi bi-twitter"></i></a>
+          <i class="bi bi-twitter"></i>
+        </a>
       </div>
+
+      <!-- Quick Links -->
       <div class="col-md-4 mb-3">
         <h6 class="fw-bold">Quick Links</h6>
         <ul class="list-unstyled">
-          <li><a href="#" class="text-light text-decoration-none">Home</a></li>
-          <li><a href="#" class="text-light text-decoration-none">Restaurants</a></li>
-          <li><a href="#" class="text-light text-decoration-none">My Orders</a></li>
-          <li><a href="#" class="text-light text-decoration-none">Cart</a></li>
+          <ng-container *ngIf="!isLoggedIn">
+            <li><a routerLink="/" class="text-light text-decoration-none">Home</a></li>
+            <li><a routerLink="/login" class="text-light text-decoration-none">Login</a></li>
+            <li><a routerLink="/register" class="text-light text-decoration-none">Register</a></li>
+          </ng-container>
+
+          <ng-container *ngIf="isLoggedIn">
+            <li><a routerLink="/restaurantlist" class="text-light text-decoration-none">Restaurants</a></li>
+            <li><a routerLink="/orders" class="text-light text-decoration-none">My Orders</a></li>
+            <li><a routerLink="/cart" class="text-light text-decoration-none">Cart 🛒</a></li>
+            <li><a (click)="logout()" routerLink="/" class="text-light text-decoration-none">Logout</a></li>
+          </ng-container>
         </ul>
-      </div> 
+      </div>
+
+      <!-- Contact -->
       <div class="col-md-4 mb-3">
         <h6 class="fw-bold">Contact Us</h6>
         <p class="small mb-1">📍 Mulshi, Maharashtra, India</p>
         <p class="small mb-1">📞 +91 98765 43210</p>
-        <p class="small mb-3">✉️ support@foodieexpress.com</p>  
+        <p class="small mb-3">✉️ support@foodieexpress.com</p>
       </div>
     </div>
-    <div class="text-center ">
+
+    <!-- Copyright -->
+    <div class="text-center">
       <small>&copy; 2025 FoodieExpress. All rights reserved.</small>
     </div>
   </div>
