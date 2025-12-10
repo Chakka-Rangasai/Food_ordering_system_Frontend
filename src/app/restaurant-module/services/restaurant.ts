@@ -32,6 +32,9 @@ export class Restaurant {
     name: 'Ocean Breeze',
     rating: 4.2,
     address: 'FC Road, Pune',
+    deliveryTime: "30-40 mins",
+    foodType: "veg",
+    description: "A cozy vegetarian restaurant serving authentic Indian flavors with quick delivery.",
     menu: [
       { id: 201, name: 'Grilled Fish', price: 350 },
       { id: 202, name: 'Prawns Curry', price: 400 },
