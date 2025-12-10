@@ -10,14 +10,15 @@
             <div class="col-12 col-md-6 mb-3">
               <div class="card shadow-sm h-100">
                 <div class="card-body">
-                  <h5 class="card-title">{{ item.name }}</h5>
-                  <p class="card-text">
+                  <h5 class="card-title d-flex align-items-center">
                     @if (item.foodType === 'Veg') {
-                      <span class="badge bg-success">Veg</span>
+                      <span class="badge bg-success me-3">Veg</span>
                     } @else if (item.foodType === 'NonVeg') {
-                      <span class="badge bg-danger">Non-Veg</span>
+                      <span class="badge bg-danger me-3">Non-Veg</span>
                     }
-                  </p>
+                    {{ item.name }}
+                  </h5>
+
                   <p class="fw-bold fs-5">₹{{ item.price }}</p>
                   
                   <div class="d-flex align-items-center mb-2">
@@ -102,8 +103,17 @@
       </div>
     </div>
   } @else {
-    <div class="alert alert-warning text-center">
-      🚫 Your cart is empty.
+    <!-- Empty cart message -->
+    <div class="alert alert-warning text-center mt-4">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      No items present in cart.
+    </div>
+
+    <!-- Optional: button to go back to restaurants -->
+    <div class="text-center mt-3">
+      <a routerLink="/restaurantlist" class="btn btn-primary">
+        <i class="bi bi-arrow-left-circle me-2"></i> Browse Restaurants
+      </a>
     </div>
   }
 </div>

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 // Interface for cart items
 export interface CartItem {
@@ -16,31 +15,57 @@ export interface CartItem {
   providedIn: 'root'
 })
 export class CartService {
-  private apiUrl = 'https://dummyapi.com/cart'; // replace with real backend URL
+  // In-memory cart items (replace with backend later)
+  private cartItems: CartItem[] = [
+    { restaurantId: 1, itemId: 103, name: "Veg Biryani", price: 220, quantity: 1, foodType: "Veg" },
+    { restaurantId: 1, itemId: 104, name: "Mutton Rogan Josh", price: 350, quantity: 1, foodType: "NonVeg" },
+    { restaurantId: 1, itemId: 105, name: "Butter Naan", price: 40, quantity: 4, foodType: "Veg" },
+    { restaurantId: 1, itemId: 106, name: "Paneer Tikka", price: 180, quantity: 2, foodType: "Veg" },
+    { restaurantId: 1, itemId: 107, name: "Fish Fry", price: 300, quantity: 1, foodType: "NonVeg" }
+  ];
 
-  constructor(private http: HttpClient) {}
+  // BehaviorSubject to hold cart count
+  private cartCountSubject = new BehaviorSubject<number>(this.getCartCount());
+  cartCount$ = this.cartCountSubject.asObservable();
+
+  constructor() {}
 
   // Add item to cart
   addToCart(item: CartItem): Observable<CartItem> {
-    console.log('Sending to backend:', item);
-    return this.http.post<CartItem>(this.apiUrl, item);
+    this.cartItems.push(item);
+    this.updateCount();
+    return of(item); // simulate backend response
   }
 
   // Get all cart items
   getCart(): Observable<CartItem[]> {
-    console.log('Fetching cart items...');
-    return this.http.get<CartItem[]>(this.apiUrl);
+    return of(this.cartItems);
   }
 
   // Update cart item
   updateCart(itemId: number, updatedItem: CartItem): Observable<CartItem> {
-    console.log(`Updating item ${itemId}`, updatedItem);
-    return this.http.put<CartItem>(`${this.apiUrl}/${itemId}`, updatedItem);
+    const index = this.cartItems.findIndex(i => i.itemId === itemId);
+    if (index !== -1) {
+      this.cartItems[index] = updatedItem;
+      this.updateCount();
+    }
+    return of(updatedItem);
   }
 
   // Remove cart item
   removeFromCart(itemId: number): Observable<void> {
-    console.log(`Removing item ${itemId}`);
-    return this.http.delete<void>(`${this.apiUrl}/${itemId}`);
+    this.cartItems = this.cartItems.filter(i => i.itemId !== itemId);
+    this.updateCount();
+    return of(undefined);
+  }
+
+  // Helper: update cart count
+  private updateCount() {
+    this.cartCountSubject.next(this.getCartCount());
+  }
+
+  // Helper: calculate cart count (distinct items)
+  private getCartCount(): number {
+    return this.cartItems.length;
   }
 }

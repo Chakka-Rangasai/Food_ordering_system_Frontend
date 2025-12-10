@@ -2,25 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserLogin } from './user-login';
-
 describe('UserLogin Component', () => {
   let component: UserLogin;
   let fixture: ComponentFixture<UserLogin>;
   let routerSpy: jasmine.SpyObj<Router>;
-
   beforeEach(async () => {
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     await TestBed.configureTestingModule({
       imports: [UserLogin, ReactiveFormsModule],
       providers: [{ provide: Router, useValue: routerSpy }]
     }).compileComponents();
-
     fixture = TestBed.createComponent(UserLogin);
     component = fixture.componentInstance;
     fixture.detectChanges();
     localStorage.clear();
   });
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -49,13 +45,13 @@ describe('UserLogin Component', () => {
   });
   it('should invalidate short password', () => {
     const passwordControl = component.loginForm.controls['password'];
-    passwordControl.setValue('Ab@1'); // too short
+    passwordControl.setValue('Ab@1'); 
     expect(passwordControl.valid).toBeFalse();
     expect(passwordControl.errors?.['minlength']).toBeTruthy();
   });
   it('should invalidate password without uppercase/lowercase/special char', () => {
     const passwordControl = component.loginForm.controls['password'];
-    passwordControl.setValue('password123'); // no uppercase or special
+    passwordControl.setValue('password123'); 
     expect(passwordControl.valid).toBeFalse();
     expect(passwordControl.errors?.['pattern']).toBeTruthy();
   });

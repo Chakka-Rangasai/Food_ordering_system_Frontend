@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserLogin } from '../../user-module/user-login/user-login';
 
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -11,6 +12,8 @@ import { UserLogin } from '../../user-module/user-login/user-login';
   styleUrls: ['./header.css']
 })
 export class Header {
+  cartCount = 0;
+
   get isLoggedIn(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';
   }

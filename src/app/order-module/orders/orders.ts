@@ -1,6 +1,6 @@
-import { CommonModule, TitleCasePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
- 
+
 @Component({
   selector: 'app-orders',
   standalone: true,
@@ -13,6 +13,7 @@ export class Orders {
     {
       orderId: 'ORD-1001',
       restaurantId: 1,
+      restaurantName: 'Spice Garden',
       name: 'Veg Biryani',
       price: 220,
       quantity: 1,
@@ -22,6 +23,7 @@ export class Orders {
     {
       orderId: 'ORD-1002',
       restaurantId: 1,
+      restaurantName: 'Aroma',
       name: 'Paneer Butter Masala',
       price: 280,
       quantity: 1,
@@ -31,6 +33,7 @@ export class Orders {
     {
       orderId: 'ORD-1003',
       restaurantId: 2,
+      restaurantName: 'Metro Food Court',
       name: 'Chicken Curry',
       price: 350,
       quantity: 2,
@@ -40,6 +43,7 @@ export class Orders {
     {
       orderId: 'ORD-1004',
       restaurantId: 3,
+      restaurantName: 'Cafe Delight',
       name: 'Grilled Sandwich',
       price: 150,
       quantity: 3,
@@ -47,9 +51,9 @@ export class Orders {
       dateTime: new Date('2025-12-08T14:45:00')
     }
   ];
- 
+
   expandedRestaurant: number | null = null;
- 
+
   get groupedOrders() {
     const groups: { [key: number]: any[] } = {};
     for (const order of this.orders) {
@@ -60,13 +64,12 @@ export class Orders {
     }
     return Object.entries(groups).map(([id, orders]) => ({
       restaurantId: +id,
-      orderId: orders[0].orderId,
+      restaurantName: orders[0].restaurantName, // ✅ include restaurant name
       orders
     }));
   }
- 
+
   toggleRestaurant(id: number) {
     this.expandedRestaurant = this.expandedRestaurant === id ? null : id;
   }
 }
- 

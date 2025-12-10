@@ -42,7 +42,7 @@
 }
 
 hr {
-  border-top: 2px solid #ddd;
+  border-top: 2px solid #565151;
   opacity: 0.8;
 }
 
@@ -57,4 +57,9 @@ hr {
 .btn-gradient:hover {
   transform: scale(1.03);
   background: linear-gradient(90deg, #6610f2, #0d6efd);
+}
+
+.card-body{
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }

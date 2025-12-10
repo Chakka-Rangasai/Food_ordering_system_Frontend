@@ -1,10 +1,11 @@
 <div class="orders-container">
   <h2 class="section-title">My Orders</h2>
+
   @for (group of groupedOrders; track group.restaurantId) {
     <div class="restaurant-card">
       <div class="restaurant-header" (click)="toggleRestaurant(group.restaurantId)">
         <div>
-          <h4 class="restaurant-name">Order ID: {{ group.orderId }}</h4>
+          <h4  class="fw-bold text-dark mb-1" >{{ group.restaurantName }}</h4>
           <p class="order-count">{{ group.orders.length }} items</p>
           <p class="order-date">📅 {{ group.orders[0].dateTime | date:'medium' }}</p>
         </div>
