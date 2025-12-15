@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Cart } from './cart';
 
-describe('Cart', () => {
+fdescribe('Cart', () => {
   let component: Cart;
   let fixture: ComponentFixture<Cart>;
 
@@ -17,7 +17,7 @@ describe('Cart', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  fit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

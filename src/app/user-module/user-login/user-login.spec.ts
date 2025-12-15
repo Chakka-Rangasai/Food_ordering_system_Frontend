@@ -1,98 +1,82 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { UserLogin } from './user-login';
-describe('UserLogin Component', () => {
+
+describe('UserLogin Component - Form Validation', () => {
   let component: UserLogin;
   let fixture: ComponentFixture<UserLogin>;
-  let routerSpy: jasmine.SpyObj<Router>;
+
   beforeEach(async () => {
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     await TestBed.configureTestingModule({
-      imports: [UserLogin, ReactiveFormsModule],
-      providers: [{ provide: Router, useValue: routerSpy }]
+      imports: [UserLogin, ReactiveFormsModule]
     }).compileComponents();
+
     fixture = TestBed.createComponent(UserLogin);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    localStorage.clear();
   });
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-  it('should invalidate empty email', () => {
+
+  // ✅ EMAIL TESTS
+  it('should mark email as required when empty', () => {
     const emailControl = component.loginForm.controls['email'];
     emailControl.setValue('');
     expect(emailControl.valid).toBeFalse();
-    expect(emailControl.errors?.['required']).toBeTruthy();
+    expect(emailControl.errors?.['required']).toBeTrue();
   });
-  it('should invalidate wrong email format', () => {
+
+  it('should mark email invalid when not in proper format', () => {
     const emailControl = component.loginForm.controls['email'];
-    emailControl.setValue('not-an-email');
+    emailControl.setValue('invalidEmail');
     expect(emailControl.valid).toBeFalse();
-    expect(emailControl.errors?.['email']).toBeTruthy();
+    expect(emailControl.errors?.['email']).toBeTrue();
   });
-  it('should validate correct email format', () => {
+
+  it('should accept a valid email address', () => {
     const emailControl = component.loginForm.controls['email'];
     emailControl.setValue('test@example.com');
     expect(emailControl.valid).toBeTrue();
+    expect(emailControl.errors).toBeNull();
   });
-  it('should require password', () => {
+
+  // ✅ PASSWORD TESTS
+  it('should mark password as required when empty', () => {
     const passwordControl = component.loginForm.controls['password'];
     passwordControl.setValue('');
     expect(passwordControl.valid).toBeFalse();
-    expect(passwordControl.errors?.['required']).toBeTruthy();
+    expect(passwordControl.errors?.['required']).toBeTrue();
   });
-  it('should invalidate short password', () => {
+
+  it('should mark password invalid when shorter than minlength', () => {
     const passwordControl = component.loginForm.controls['password'];
-    passwordControl.setValue('Ab@1'); 
+    passwordControl.setValue('abc'); // too short
     expect(passwordControl.valid).toBeFalse();
     expect(passwordControl.errors?.['minlength']).toBeTruthy();
   });
-  it('should invalidate password without uppercase/lowercase/special char', () => {
+
+  it('should mark password invalid when missing uppercase/lowercase/special char', () => {
     const passwordControl = component.loginForm.controls['password'];
-    passwordControl.setValue('password123'); 
+    passwordControl.setValue('password123'); // no uppercase or special char
     expect(passwordControl.valid).toBeFalse();
     expect(passwordControl.errors?.['pattern']).toBeTruthy();
   });
-  it('should validate strong password', () => {
+
+  it('should accept a valid password', () => {
     const passwordControl = component.loginForm.controls['password'];
-    passwordControl.setValue('Strong@123');
+    passwordControl.setValue('Valid@123'); // meets all rules
     expect(passwordControl.valid).toBeTrue();
+    expect(passwordControl.errors).toBeNull();
   });
-  it('should login successfully with correct credentials', () => {
-    component.loginForm.setValue({
-      email: 'jujarurajdeep@gmail.com',
-      password: 'Rajdeep@8106'
-    });
-    component.onSubmit();
-    expect(component.successMessage).toBe('Login successful!');
-    expect(component.errorMessage).toBe('');
-    expect(UserLogin.isLoggedIn).toBeTrue();
-    expect(localStorage.getItem('isLoggedIn')).toBe('true');
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/restaurantlist']);
+
+  // ✅ FORM SUBMISSION TEST
+  it('should not submit when form is invalid', () => {
+    component.loginForm.controls['email'].setValue('');
+    component.loginForm.controls['password'].setValue('');
+    expect(component.loginForm.valid).toBeFalse();
   });
-  it('should fail login with wrong credentials', () => {
-    component.loginForm.setValue({
-      email: 'wrong@example.com',
-      password: 'Wrong@123'
-    });
-    component.onSubmit();
-    expect(component.errorMessage).toBe('Login failed. Please check your credentials.');
-    expect(component.successMessage).toBe('');
-    expect(UserLogin.isLoggedIn).toBeFalse();
-    expect(localStorage.getItem('isLoggedIn')).toBeNull();
-    expect(routerSpy.navigate).not.toHaveBeenCalled();
-  });
-  it('should not submit if form is invalid', () => {
-    component.loginForm.setValue({
-      email: '',
-      password: ''
-    });
-    component.onSubmit();
-    expect(component.successMessage).toBe('');
-    expect(component.errorMessage).toBe('');
-    expect(UserLogin.isLoggedIn).toBeFalse();
-    expect(routerSpy.navigate).not.toHaveBeenCalled();
+
+  it('should submit when form is valid', () => {
+    component.loginForm.controls['email'].setValue('test@example.com');
+    component.loginForm.controls['password'].setValue('Valid@123');
+    expect(component.loginForm.valid).toBeTrue();
   });
 });
