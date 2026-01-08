@@ -73,6 +73,7 @@
 }
 
 .login-here-link:hover {
+  cursor: pointer;
   color: #023e8a;        
   text-decoration: underline;
 }

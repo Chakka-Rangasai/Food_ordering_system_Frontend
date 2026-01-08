@@ -1,5 +1,4 @@
 <div class="container mt-4">
-  <!-- Restaurant Info -->
   <div class="row mb-3">
     <div class="col-12">
       <div class="card shadow-sm">
@@ -17,34 +16,25 @@
       </div>
     </div>
   </div>
-
-<!-- Veg / NonVeg + Dropdown Filters in one row -->
 <div class="row mb-3">
   <div class="col-12 d-flex justify-content-center align-items-center gap-3">
-    
-    <!-- Veg/NonVeg buttons -->
     <div class="btn-group" role="group">
       <button type="button" class="btn btn-outline-success" (click)="filterByType('Veg')">Veg</button>
       <button type="button" class="btn btn-outline-danger" (click)="filterByType('NonVeg')">Non-Veg</button>
     </div>
-
-    <!-- Dropdown filters -->
     <div class="dropdown">
       <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterMenuButton"
               data-bs-toggle="dropdown" aria-expanded="false">
         Filter Menu
       </button>
       <ul class="dropdown-menu" aria-labelledby="filterMenuButton">
-        <!-- Price Filters -->
         <li><button class="dropdown-item" (click)="filterByPrice('low')">Price: Low (₹0 - ₹100)</button></li>
         <li><button class="dropdown-item" (click)="filterByPrice('medium')">Price: Medium (₹101 - ₹250)</button></li>
         <li><button class="dropdown-item" (click)="filterByPrice('high')">Price: High (₹251+)</button></li>
         <li><hr class="dropdown-divider"></li>
-        <!-- Rating Filters -->
         <li><button class="dropdown-item" (click)="filterByRating(4.5)">Rating: 4.5+</button></li>
         <li><button class="dropdown-item" (click)="filterByRating(3.5)">Rating: 3.5+</button></li>
         <li><hr class="dropdown-divider"></li>
-        <!-- Reset -->
         <li><button class="dropdown-item" (click)="resetFilter()">Show All</button></li>
       </ul>
     </div>

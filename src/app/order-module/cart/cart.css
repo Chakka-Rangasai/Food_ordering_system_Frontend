@@ -2,15 +2,12 @@
   font-size: 1.2rem;
   font-weight: 600;
 }
-
 .fs-5 {
   font-size: 1.4rem !important;
 }
-
 .list-group-item {
   font-size: 0.95rem;
 }
-
 @media (max-width: 576px) {
   .card-title {
     font-size: 1rem;
@@ -22,16 +19,13 @@
 .card {
   border-radius: 12px;
 }
-
 .card-title {
   font-size: 1.2rem;
 }
-
 .form-control {
   border-radius: 8px;
   transition: all 0.3s ease;
 }
-
 .form-control:focus {
   border-color: #0d6efd;
   box-shadow: 0 0 6px rgba(13, 110, 253, 0.4);

@@ -1,11 +1,8 @@
-/* Navbar gradient background */
 .custom-navbar {
   background: linear-gradient(90deg, #e63946, #d90429); /* bold red gradient */
   padding: 0.5rem 1rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
-
-/* Brand styling */
 .navbar-brand {
   font-size: 1.6rem;
   letter-spacing: 1px;
@@ -15,10 +12,8 @@
 .navbar-brand:hover {
   transform: scale(1.05);
 }
-
-/* Unified button style */
 .nav-btn {
-  background-color: #f77f00;   /* warm orange tone */
+  background-color: #f77f00;   
   color: #fff !important;
   font-weight: 600;
   border-radius: 25px;
@@ -26,21 +21,15 @@
   margin: 0 4px;
   transition: all 0.3s ease;
 }
-
-/* Hover effect */
 .nav-btn:hover {
-  background-color: #1888a4;   /* lighter golden orange */
+  background-color: #1888a4;   
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.25);
 }
-
-/* Active link style */
 .nav-btn.active, .nav-btn:focus {
-  background-color: #d90429; /* deep red for active state */
+  background-color: #d90429;
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 }
-
-/* Profile image styling */
 .dropdown img {
   cursor: pointer;
   border: 2px solid #fff;
@@ -54,8 +43,6 @@
   transform: scale(1.1);
   border-color: #ffba08;
 }
-
-/* Responsive tweaks */
 @media (max-width: 768px) {
   .custom-navbar {
     background: linear-gradient(90deg, #e63946, #d90429);

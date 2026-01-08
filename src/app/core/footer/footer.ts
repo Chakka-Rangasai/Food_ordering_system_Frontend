@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { UserLogin } from '../../user-module/user-login/user-login';
+import { UserService } from '../../user-module/Services/user-service';
 
 @Component({
   selector: 'app-footer',
@@ -11,13 +11,16 @@ import { UserLogin } from '../../user-module/user-login/user-login';
   styleUrls: ['./footer.css']
 })
 export class Footer {
-  get isLoggedIn(): boolean {
-    return localStorage.getItem('isLoggedIn') === 'true';
+  isLoggedIn = false;
+
+  constructor(private userService: UserService) {
+    this.userService.isLoggedIn$.subscribe(state => {
+      this.isLoggedIn = state;
+    });
   }
 
   logout() {
-    UserLogin.isLoggedIn = false;
-    localStorage.removeItem('isLoggedIn');
+    this.userService.setLoginState(false);
     console.log('User logged out');
   }
 }

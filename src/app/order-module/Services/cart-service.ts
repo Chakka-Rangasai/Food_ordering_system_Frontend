@@ -1,8 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-
-// Interface for cart items
+import { tap } from 'rxjs/operators';
 export interface CartItem {
+  id?: number;
   restaurantId: number;
   itemId: number;
   name: string;
@@ -10,62 +11,54 @@ export interface CartItem {
   quantity: number;
   foodType: string;
 }
-
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  // In-memory cart items (replace with backend later)
-  private cartItems: CartItem[] = [
-    { restaurantId: 1, itemId: 103, name: "Veg Biryani", price: 220, quantity: 1, foodType: "Veg" },
-    { restaurantId: 1, itemId: 104, name: "Mutton Rogan Josh", price: 350, quantity: 1, foodType: "NonVeg" },
-    { restaurantId: 1, itemId: 105, name: "Butter Naan", price: 40, quantity: 4, foodType: "Veg" },
-    { restaurantId: 1, itemId: 106, name: "Paneer Tikka", price: 180, quantity: 2, foodType: "Veg" },
-    { restaurantId: 1, itemId: 107, name: "Fish Fry", price: 300, quantity: 1, foodType: "NonVeg" }
-  ];
-
-  // BehaviorSubject to hold cart count
-  private cartCountSubject = new BehaviorSubject<number>(this.getCartCount());
+  private cartItems: CartItem[] = [];
+  private cartCountSubject = new BehaviorSubject<number>(0);
   cartCount$ = this.cartCountSubject.asObservable();
-
-  constructor() {}
-
-  // Add item to cart
+  private apiUrl = 'http://localhost:8080/cart-api/cart';
+  constructor(private http: HttpClient) {} 
   addToCart(item: CartItem): Observable<CartItem> {
-    this.cartItems.push(item);
-    this.updateCount();
-    return of(item); // simulate backend response
+    return this.http.post<CartItem>(`${this.apiUrl}/add`, item).pipe(
+      tap(() => this.updateCount())
+    );
   }
-
-  // Get all cart items
   getCart(): Observable<CartItem[]> {
-    return of(this.cartItems);
+    return this.http.get<CartItem[]>(`${this.apiUrl}/user`).pipe(
+      tap(items => {
+        this.cartCountSubject.next(items.length); // Broadcast the new count
+      })
+    );
   }
-
-  // Update cart item
-  updateCart(itemId: number, updatedItem: CartItem): Observable<CartItem> {
-    const index = this.cartItems.findIndex(i => i.itemId === itemId);
-    if (index !== -1) {
-      this.cartItems[index] = updatedItem;
-      this.updateCount();
-    }
-    return of(updatedItem);
+  updateCartQuantity(dbId: number, quantity: number): Observable<CartItem> {
+    return this.http.put<CartItem>(`${this.apiUrl}/update/${dbId}`, { quantity }).pipe(
+      tap(() => this.updateCount()) 
+    );
   }
-
-  // Remove cart item
-  removeFromCart(itemId: number): Observable<void> {
-    this.cartItems = this.cartItems.filter(i => i.itemId !== itemId);
-    this.updateCount();
-    return of(undefined);
-  }
-
-  // Helper: update cart count
   private updateCount() {
-    this.cartCountSubject.next(this.getCartCount());
+    this.getCart().subscribe(items => {
+        this.cartCountSubject.next(items.length);
+    });
   }
-
-  // Helper: calculate cart count (distinct items)
+  removeFromCart(dbId: number): Observable<string> {
+  return this.http.delete(`${this.apiUrl}/remove/${dbId}`, { responseType: 'text' }).pipe(
+    tap(() => this.updateCount()) 
+  );
+}
+  clearCart(): Observable<string> {
+  return this.http.delete(`${this.apiUrl}/clear`, { responseType: 'text' }).pipe(
+    tap(() => {
+      this.cartCountSubject.next(0);
+    })
+  );
+}
   private getCartCount(): number {
     return this.cartItems.length;
   }
+  clearInternalCart() {
+  this.cartItems = [];
+  this.cartCountSubject.next(0); 
+}
 }

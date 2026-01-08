@@ -13,48 +13,67 @@ import { RouterLink } from '@angular/router';
 })
 export class Cart implements OnInit {
   cartItems: CartItem[] = [];
-
   deliveryFee = 12;
   packingCost = 7;
   gstRate = 0.04;
-
   deliveryAddress = {
     name: '',
     phone: '',
     street: '',
     pincode: ''
   };
-
   constructor(private cartService: CartService, private snackBar: MatSnackBar) {}
-
   ngOnInit(): void {
-    // Load cart items from backend via CartService
-    this.cartService.getCart().subscribe(items => {
-      this.cartItems = items;
+    this.loadCartData();
+  }
+  loadCartData(): void {
+    this.cartService.getCart().subscribe({
+      next: (items) => {
+        this.cartItems = items;
+        console.log('Cart items loaded from backend:', items);
+      },
+      error: (err) => {
+        console.error('Failed to load cart', err);
+        this.snackBar.open('Error loading cart. Please try again.', 'Close', { duration: 3000 });
+      }
     });
   }
-
-  updateQuantity(item: CartItem, change: number): void {
-    const newQuantity = item.quantity + change;
-    if (newQuantity <= 0) {
-      this.removeItem(item.itemId);
-    } else {
-      const updatedItem = { ...item, quantity: newQuantity };
-      this.cartService.updateCart(item.itemId, updatedItem).subscribe(() => {
-        item.quantity = newQuantity;
+ updateQuantity(item: CartItem, change: number): void {
+  const newQuantity = item.quantity + change;
+  if (newQuantity <= 0) {
+    if (item.id) this.removeItem(item.id);
+  } else {
+    this.cartService.updateCartQuantity(item.id!, newQuantity).subscribe({
+      next: (res: CartItem) => {
+        item.quantity = res.quantity;
+        item.price = res.price; 
+        console.log('Backend updated quantity and price:', res);
+      },
+      error: (err) => {
+        this.snackBar.open('Update failed', 'Close', { duration: 2000 });
+      }
+    });
+  }
+}
+ removeItem(dbId: number): void {
+  this.cartService.removeFromCart(dbId).subscribe({
+    next: (response) => {
+      this.cartItems = this.cartItems.filter(item => item.id !== dbId);
+      this.snackBar.open('Item removed successfully', 'Close', { 
+        duration: 3000,
+        verticalPosition: 'top' 
       });
+      console.log(response);
+    },
+    error: (err) => {
+      console.error('Delete failed', err);
+      this.snackBar.open('Failed to remove item', 'Close', { duration: 3000 });
     }
-  }
-
-  removeItem(itemId: number): void {
-    this.cartService.removeFromCart(itemId).subscribe(() => {
-      this.cartItems = this.cartItems.filter(item => item.itemId !== itemId);
-    });
-  }
-
+  });
+}
   getItemsCost(): number {
-    return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  }
+  return this.cartItems.reduce((sum, item) => sum + item.price, 0);
+}
 
   getGST(): number {
     return this.getItemsCost() * this.gstRate;
@@ -63,9 +82,7 @@ export class Cart implements OnInit {
   getGrandTotal(): number {
     return this.getItemsCost() + this.deliveryFee + this.packingCost + this.getGST();
   }
-
   placeOrder() {
-    // Validation with snackbar
     if (!this.deliveryAddress.name ||
         !this.deliveryAddress.phone ||
         !this.deliveryAddress.street ||
@@ -93,7 +110,21 @@ export class Cart implements OnInit {
       total: this.getGrandTotal(),
       deliveryAddress: this.deliveryAddress
     });
+    this.cartService.clearCart().subscribe({
+    next: (response) => {
+      this.cartItems = [];
+      this.snackBar.open('✅ Order placed Successfully', 'Close', { 
+        duration: 5000, 
+        horizontalPosition: 'center', 
+        verticalPosition: 'top'
+      });
 
-    alert('✅ Order placed successfully!');
+      console.log('Backend response:', response);
+    },
+    error: (err) => {
+      console.error('Failed to clear cart after order:', err);
+      alert('Order processed, but failed to clear cart in database.');
+    }
+  });
   }
 }

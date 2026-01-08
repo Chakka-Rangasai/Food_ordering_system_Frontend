@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../order-module/Services/cart-service';
+import { UserService } from '../../user-module/Services/user-service';
 
 @Component({
   selector: 'app-header',
-  standalone: true, // ✅ mark as standalone since you use imports
+  standalone: true,
   imports: [RouterLink, CommonModule],
   templateUrl: './header.html',
   styleUrls: ['./header.css']
@@ -13,9 +14,14 @@ import { CartService } from '../../order-module/Services/cart-service';
 export class Header {
   cartCount = 0;
   currentRoute = '';
-  isCollapsed = true; // ✅ toggle flag
+  isCollapsed = true;
+  isLoggedIn = false;
 
-  constructor(private cartService: CartService, private router: Router) {
+  constructor(
+    private cartService: CartService,
+    private router: Router,
+    private userService: UserService
+  ) {
     this.cartService.cartCount$.subscribe(count => {
       this.cartCount = count;
     });
@@ -25,10 +31,10 @@ export class Header {
         this.currentRoute = event.url;
       }
     });
-  }
 
-  get isLoggedIn(): boolean {
-    return localStorage.getItem('isLoggedIn') === 'true';
+    this.userService.isLoggedIn$.subscribe(state => {
+      this.isLoggedIn = state;
+    });
   }
 
   toggleNavbar() {
@@ -36,8 +42,10 @@ export class Header {
   }
 
   logout() {
-    localStorage.removeItem('isLoggedIn'); // clear login state
+    this.userService.setLoginState(false);
+    this.cartService.clearInternalCart();
     console.log('User logged out');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
+    localStorage.removeItem('token');
   }
 }

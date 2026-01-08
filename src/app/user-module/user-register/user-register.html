@@ -29,6 +29,15 @@
             </div>
           </div>
           <div class="form-floating mb-3">
+            <input type="text" id="mobileNo" class="form-control"
+                   formControlName="mobileNo" placeholder="Mobile Number">
+            <label for="mobileNo">Mobile Number</label>
+            <div *ngIf="registerForm.controls['mobileNo'].touched && registerForm.controls['mobileNo'].errors"
+                 class="text-danger small mt-1">
+              Mobile number must be 10 digits.
+            </div>
+          </div>
+          <div class="form-floating mb-3">
             <input type="password" id="password" class="form-control"
                    formControlName="password" placeholder="Password">
             <label for="password">Password</label>
@@ -45,29 +54,15 @@
               Must include uppercase, lowercase, number, and special character.
             </div>
           </div>
-          <div class="form-floating mb-3">
-            <input type="password" id="confirmPassword" class="form-control"
-                   formControlName="confirmPassword" placeholder="Confirm Password">
-            <label for="confirmPassword">Confirm Password</label>
-            <div *ngIf="registerForm.controls['confirmPassword'].touched && registerForm.errors?.['mismatch']"
-                 class="text-primary small mt-1">
-              Passwords do not match.
-            </div>
-          </div>
+
           <button type="submit" class="btn btn-primary w-100 py-2">
             Register
           </button>
         </form>
-        <div *ngIf="successMessage" class="alert alert-success mt-3 text-center">
-          {{ successMessage }}
-        </div>
-        <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
-          {{ errorMessage }}
-        </div>
         <div class="text-center mt-3">
-         <small>Already have an account? 
-         <a routerLink="/login" class="login-here-link">Login here</a>
-        </small>
+          <small>Already have an account? 
+            <a routerLink="/login" class="login-here-link">Login here</a>
+          </small>
         </div>
       </div>
     </div>
