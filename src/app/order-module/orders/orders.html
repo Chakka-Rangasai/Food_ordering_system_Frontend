@@ -1,46 +1,45 @@
 <div class="orders-container">
-  <h2 class="section-title">My Orders</h2>
+  <h2>My Orders</h2>
 
-  @for (group of groupedOrders; track group.restaurantId) {
-    <div class="restaurant-card">
-      <div class="restaurant-header" (click)="toggleRestaurant(group.restaurantId)">
-        <div>
-          <h4  class="fw-bold text-dark mb-1" >{{ group.restaurantName }}</h4>
-          <p class="order-count">{{ group.orders.length }} items</p>
-          <p class="order-date">📅 {{ group.orders[0].dateTime | date:'medium' }}</p>
-        </div>
-        <div class="order-status">
-          <button class="status-btn">Placed</button>
-        </div>
-        <button class="toggle-btn">
-          @if (expandedRestaurant === group.restaurantId) {
-            ✖
-          } @else {
-            ▼
-          }
-        </button>
+  <!-- Skeleton Loader -->
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3]">
+      <div class="skeleton-left">
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
       </div>
-
-      @if (expandedRestaurant === group.restaurantId) {
-        <div class="order-list">
-          @for (order of group.orders; track order.orderId) {
-            <div class="order-row">
-              <div class="order-left">
-                <h5 class="order-name">{{ order.name }}</h5>
-                <p class="order-meta">
-                  Qty: {{ order.quantity }} • ₹{{ order.price * order.quantity }}
-                </p>
-              </div>
-              <div class="order-right">
-                <span class="badge food-type"
-                      [ngClass]="order.foodType === 'Veg' ? 'veg' : 'nonveg'">
-                  {{ order.foodType }}
-                </span>
-              </div>
-            </div>
-          }
-        </div>
-      }
+      <div class="skeleton-right">
+        <div class="skeleton-badge"></div>
+        <div class="skeleton-button"></div>
+      </div>
     </div>
-  }
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && orders.length === 0" class="empty-state">
+    <p>😕 No orders found. Hungry? Place your first order now!</p>
+  </div>
+
+  <!-- Orders List -->
+  <div *ngFor="let order of orders" class="order-summary-card">
+    <div class="summary-left">
+      <div class="order-id">Order #{{ order.orderId }}</div>
+      <h6 class="restaurant-name">{{ order.restaurantName }}</h6>
+      <p class="restaurant-location">📍 {{ order.restaurantLocation }}</p>
+      <div class="order-meta">
+        🍴 Items: {{ order.items }} &nbsp;&nbsp;&nbsp;&nbsp; Bill Amount: ₹{{ order.totalAmount | number:'1.2-2' }}
+      </div>
+      <div class="order-date">
+        🕒 Ordered: {{ order.createdAt | date:'medium' }}
+      </div>
+    </div>
+
+    <div class="summary-right">
+      <span class="status-badge" [ngClass]="order.status.toLowerCase()">
+        {{ order.status }}
+      </span>
+      <button class="details-btn" (click)="viewDetails(order)">View details →</button>
+    </div>
+  </div>
 </div>

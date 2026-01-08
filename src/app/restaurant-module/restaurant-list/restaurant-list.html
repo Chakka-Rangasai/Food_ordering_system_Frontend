@@ -1,69 +1,188 @@
+
+<!-- src/app/restaurant-list/restaurant-list.html -->
 <div class="container mt-4">
+
   <!-- Search + Toggle Row -->
   <div class="row mb-3 g-2">
     <!-- Search Bar -->
     <div class="col-12 col-md-9">
       <div class="input-group">
         <span class="input-group-text">🔍</span>
-        <input type="text" class="form-control" placeholder="Search restaurants..."
-               [(ngModel)]="searchText" />
+        <input type="text"
+               class="form-control"
+               placeholder="Search restaurants..."
+               [ngModel]="searchText"
+               (ngModelChange)="onSearchInput($event)" />
+        <button class="btn btn-outline-secondary" type="button"
+                (click)="clearSearch()" [disabled]="!searchText">
+          ✖
+        </button>
       </div>
     </div>
 
-    <!-- Veg/Non-Veg Toggle -->
+    <!-- Food Type Toggle -->
     <div class="col-12 col-md-3 d-flex justify-content-md-end">
       <div class="btn-group w-100" role="group">
         <input type="radio" class="btn-check" name="foodType" id="veg" value="veg"
-               [(ngModel)]="selectedFoodType">
+               [ngModel]="selectedFoodType" (ngModelChange)="selectedFoodType = $event; onTypeChange()">
         <label class="btn btn-outline-success" for="veg">Veg</label>
 
         <input type="radio" class="btn-check" name="foodType" id="nonveg" value="nonveg"
-               [(ngModel)]="selectedFoodType">
+               [ngModel]="selectedFoodType" (ngModelChange)="selectedFoodType = $event; onTypeChange()">
         <label class="btn btn-outline-danger" for="nonveg">Non-Veg</label>
 
         <input type="radio" class="btn-check" name="foodType" id="both" value="both"
-               [(ngModel)]="selectedFoodType">
+               [ngModel]="selectedFoodType" (ngModelChange)="selectedFoodType = $event; onTypeChange()">
         <label class="btn btn-outline-primary" for="both">Both</label>
       </div>
     </div>
   </div>
 
-  <!-- Restaurant Cards -->
-  <div class="row">
-    @for (restaurant of paginatedRestaurants; track restaurant.id) {
-      <div class="col-12 col-sm-6 col-md-4 mb-3">
-        <div class="card h-100 shadow-sm" (click)="viewDetails(restaurant)">
-          <div class="card-body text-center">
-            <h5 class="card-title fw-bold">{{ restaurant.name }}</h5>
-            <p class="card-text text-muted">📍 {{ restaurant.address }}</p>
-
-            <!-- Rating + Delivery Time together -->
-            <span class="badge bg-success me-2">
-              ⭐ {{ restaurant.rating }}
-            </span>
-            <span class="text-primary">
-              ⏱️ {{ restaurant.deliveryTime }}
-            </span>
-          </div>
-        </div>
-      </div>
-    }
+  <!-- Error Banner -->
+  <div *ngIf="errorMsg" class="alert alert-danger" role="alert">
+    {{ errorMsg }}
   </div>
 
-  <!-- Pagination -->
-  @if (totalPages > 1) {
-    <nav>
-      <ul class="pagination justify-content-center">
-        <li class="page-item" [class.disabled]="currentPage === 1">
-          <a class="page-link" (click)="prevPage()">Previous</a>
-        </li>
-        <li class="page-item disabled">
-          <span class="page-link">Page {{ currentPage }} of {{ totalPages }}</span>
-        </li>
-        <li class="page-item" [class.disabled]="currentPage === totalPages">
-          <a class="page-link" (click)="nextPage()">Next</a>
-        </li>
-      </ul>
-    </nav>
-  }
+  <!-- Skeleton Loading -->
+  <div *ngIf="loading" class="row">
+    <div *ngFor="let _ of skeletonItems; index as i" class="col-12 col-sm-6 col-md-4 mb-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <div class="skeleton title mb-2"></div>
+          <div class="skeleton line mb-2"></div>
+          <div class="skeleton badge me-2"></div>
+          <div class="skeleton badge"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && restaurants.length === 0" class="text-center py-5">
+    <div class="display-6 mb-2">No restaurants found</div>
+    <p class="text-muted mb-3">Try changing the search or food type filter.</p>
+    <div class="small text-secondary">
+      <strong>Search:</strong> "{{ searchText || '—' }}" &nbsp;|&nbsp;
+      <strong>Type:</strong>
+      {{
+        selectedFoodType === 'veg' ? 'Veg' :
+        selectedFoodType === 'nonveg' ? 'Non-Veg' : 'Both'
+      }}
+    </div>
+  </div>
+
+  <!-- Restaurant Cards -->
+  <!-- <div *ngIf="!loading && restaurants.length > 0" class="row">
+    <div *ngFor="let restaurant of restaurants; trackBy: trackById"
+         class="col-12 col-sm-6 col-md-4 mb-3">
+      <div class="card h-100 shadow-sm" (click)="viewDetails(restaurant)">
+        <div class="card-body text-center">
+          <h5 class="card-title fw-bold">{{ restaurant.name }}</h5>
+          <p class="card-text text-muted">📍 {{ restaurant.address }}</p>
+          <span class="badge bg-success me-2">⭐ {{ formatRating(restaurant.rating) }}</span>
+          <span class="text-primary">⏱️ {{ restaurant.deliveryTime }}</span>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div *ngIf="!loading && restaurants.length > 0" class="row">
+  <div *ngFor="let restaurant of restaurants; trackBy: trackById"
+       class="col-12 col-sm-6 col-md-4 mb-3">
+    <div class="card h-100 shadow-sm" (click)="viewDetails(restaurant)">
+      
+      
+       <img [src]="restaurant.imageUrl" 
+           alt="{{ restaurant.name }}" 
+           class="card-img-top" 
+           style="height: 150px; object-fit: cover;">
+      
+      <div class="card-body text-center">
+        <h5 class="card-title fw-bold">{{ restaurant.name }}</h5>
+        <p class="card-text text-muted">📍 {{ restaurant.address }}</p>
+        <span class="badge bg-success me-2">⭐ {{ formatRating(restaurant.rating) }}</span>
+        <span class="text-primary">⏱️ {{ restaurant.deliveryTime }}</span>
+      </div>
+    </div>
+  </div>
+</div>  -->
+
+
+<div *ngIf="!loading && restaurants.length > 0" class="row">
+  <div
+    *ngFor="let restaurant of restaurants; trackBy: trackById"
+    class="col-12 col-sm-6 col-md-4 mb-3"
+  >
+    <div class="card h-100 shadow-sm" (click)="viewDetails(restaurant)">
+      <img
+        [src]="restaurant.imageUrl + '?w=400&h=300&fit=crop&auto=format'"
+        [alt]="restaurant.name"
+        class="card-img-top"
+        loading="lazy"
+        decoding="async"
+        style="height: 150px; object-fit: cover;"
+      />
+
+      <div class="card-body text-center">
+        <h5 class="card-title fw-bold">{{ restaurant.name }}</h5>
+        <p class="card-text text-muted">📍 {{ restaurant.address }}</p>
+        <span class="badge bg-success me-2">
+          ⭐ {{ formatRating(restaurant.rating) }}
+        </span>
+        <span class="text-primary">
+          ⏱️ {{ restaurant.deliveryTime }}
+        </span>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+
+
+
+
+
+
+  <!-- Page-size selector -->
+  <nav *ngIf="!loading && restaurants.length > 0" aria-label="Restaurant pagination">
+<div class="d-flex justify-content-center align-items-center gap-2 mb-2" *ngIf="!loading">
+  <label for="pageSizeSelect" class="form-label mb-0 small fw-bold">Show per page:</label>
+  <select
+    id="pageSizeSelect"
+    class="form-select form-select-sm w-auto select-compact"
+    [ngModel]="pageSize"
+    (ngModelChange)="onPageSizeChange($event)"
+    aria-label="Select number of restaurants to display per page"
+  >
+    <option *ngFor="let size of pageSizeOptions" [value]="size">
+      {{ size }}
+    </option>
+  </select>
+</div>
+</nav>
+
+<!-- Pagination -->
+<nav *ngIf="!loading && totalPages > 1" aria-label="Restaurant pagination">
+
+  <ul class="pagination justify-content-center flex-wrap">
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <button class="page-link" type="button" (click)="prevPage()">Previous</button>
+    </li>
+
+    <li *ngFor="let p of pageNumbers" class="page-item" [class.active]="p === currentPage">
+      <button class="page-link" type="button" (click)="goToPage(p)">{{ p }}</button>
+    </li>
+
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <button class="page-link" type="button" (click)="nextPage()">Next</button>
+    </li>
+  </ul>
+
+  <p class="text-center small text-muted mt-1">
+    Page {{ currentPage }} of {{ totalPages }}
+    • {{ totalElements }} total restaurants
+    • Showing {{ pageSize }} per page
+  </p>
+</nav>
+

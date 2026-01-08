@@ -1,0 +1,64 @@
+<div class="success-wrap" *ngIf="order as o">
+  <!-- Animated checkmark -->
+  <div class="checkmark">
+    <div class="circle"></div>
+    <div class="check"></div>
+  </div>
+
+  <h2>Order placed successfully!</h2>
+
+  <p class="muted">
+    Order #: <strong>{{ o.orderId }}</strong> &nbsp;•&nbsp;
+    Status: <strong>{{ o.status }}</strong> &nbsp;•&nbsp;
+    Placed at: <strong>{{ o.createdAt | date: 'medium' }}</strong>
+  </p>
+
+  <div class="summary">
+    <h3>Delivery Address</h3>
+    <div class="addr">
+      <div>{{ o.deliveryAddress.name }}</div>
+      <div>{{ o.deliveryAddress.phone }}</div>
+      <div>{{ o.deliveryAddress.street }}</div>
+      <div>PIN: {{ o.deliveryAddress.pincode }}</div>
+    </div>
+
+    <h3>Items</h3>
+    <ul class="items">
+      <li *ngFor="let it of o.items">
+        <span class="name">{{ it.name }}</span>
+        <span class="qty">x{{ it.quantity }}</span>
+        <span class="price">₹{{ it.price | number:'1.2-2' }}</span>
+      </li>
+    </ul>
+
+    <div class="footer">
+      <div class="row">
+        <span>Restaurant ID:</span>
+        <strong>{{ o.restaurantId }}</strong>
+      </div>
+      <div class="row">
+        <span>User ID:</span>
+        <strong>{{ o.userId }}</strong>
+      </div>
+      <div class="row">
+        <span>Total Amount:</span>
+        <strong>₹{{ o.totalAmount | number:'1.2-2' }}</strong>
+      </div>
+      <div class="row" *ngIf="o.idempotencyKey">
+        <span>Idempotency Key:</span>
+        <code>{{ o.idempotencyKey }}</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="primary" (click)="goNow()">Go to Restaurants</button>
+    <div class="timer">Auto‑redirect in {{ countdown }}s…</div>
+  </div>
+</div>
+
+<!-- Fallback if order is missing entirely -->
+<div class="success-wrap" *ngIf="!order">
+  <h2>No order found</h2>
+  <p class="muted">Redirecting to restaurants…</p>
+</div>

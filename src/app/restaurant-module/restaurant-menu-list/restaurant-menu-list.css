@@ -12,3 +12,8 @@
 .fs-4 {
   font-size: 1.6rem !important; /* bigger price font */
 }
+.back-btn {
+  font-weight: 600;
+  text-decoration: none;
+  padding-left: 0;
+}

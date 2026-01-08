@@ -8,6 +8,9 @@ import { RestaurantList } from './restaurant-module/restaurant-list/restaurant-l
 import { RestaurantMenuList } from './restaurant-module/restaurant-menu-list/restaurant-menu-list';
 import { Orders } from './order-module/orders/orders';
 import { Cart } from './order-module/cart/cart';
+import { OrderSuccessComponent } from './order-module/order-sucess/order-sucess';
+import { OrderDetailsComponent } from './order-module/order-details/order-details';
+
 
 export const routes: Routes = [
     { path:'',component:Landing},
@@ -17,10 +20,18 @@ export const routes: Routes = [
     {
         path:'restaurantdetails',component:RestaurantMenuList
     },
+    
+     {
+        path:'ordersdetails',component:OrderDetailsComponent
+    },
+    
     {
         path:'orders',component:Orders
     },
     {
         path:'cart',component:Cart
+    },
+    {
+        path:'order-success',component:OrderSuccessComponent
     }
 ];

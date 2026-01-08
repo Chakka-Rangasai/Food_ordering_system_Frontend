@@ -1,0 +1,57 @@
+.detail-container { max-width:900px; margin:0 auto; padding:16px; background:#fff; }
+.back-btn { background:transparent; border:none; color:#007bff; cursor:pointer; margin-bottom:8px; }
+.sub { margin-top:4px; }
+/* .section {  padding-top:12px; margin-top:12px; } */
+.item-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px dashed #060606; }
+.item-left { min-width:0; }
+.item-name { font-weight:600; }
+.total-row { display:flex; justify-content:space-between; padding-top:12px; font-weight:700; }
+
+.timeline {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.timeline-step {
+  text-align: center;
+  flex: 1;
+  position: relative;
+}
+
+.timeline-step .dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin: 0 auto 8px;
+  background-color: #ccc;
+  position: relative;
+  z-index: 1;
+}
+
+.timeline-step.done .dot {
+  background-color: #28a745; /* green for completed */
+}
+
+.timeline-step .label {
+  font-size: 14px;
+  color: #555;
+}
+
+.timeline-step .connector {
+  position: absolute;
+  top: 8px; /* aligns with dot center */
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background-color: #ccc;
+  z-index: 0;
+}
+
+.timeline-step.done .connector {
+  background-color: #28a745; /* green when step is done */
+}
+
+.section.order-info{
+ color: black;
+}

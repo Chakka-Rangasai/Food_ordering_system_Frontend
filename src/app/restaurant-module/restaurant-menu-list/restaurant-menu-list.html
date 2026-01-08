@@ -1,13 +1,86 @@
+
 <div class="container mt-4">
-  <!-- Restaurant Info -->
+
+  <!-- Back button -->
   <div class="row mb-3">
+    <div class="col-12">
+      <button type="button" class="btn btn-link back-btn" (click)="goBack()">
+        ← Back to Restaurants
+      </button>
+    </div>
+  </div>
+
+  <!-- 🔄 Skeletons (shown while loading) -->
+  <div *ngIf="loading">
+    <!-- Header skeleton -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h3 class="card-title placeholder-wave">
+              <span class="placeholder col-6"></span>
+            </h3>
+            <p class="card-text placeholder-wave">
+              <span class="placeholder col-4"></span>
+            </p>
+            <p class="card-text placeholder-wave">
+              <span class="placeholder col-3"></span>
+            </p>
+            <p class="card-text placeholder-wave">
+              <span class="placeholder col-2"></span>
+            </p>
+            <p class="card-text placeholder-wave">
+              <span class="placeholder col-8"></span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu grid skeletons -->
+    <div class="row">
+      <div *ngFor="let _ of skeletonCards" class="col-12 col-sm-6 col-lg-4 mb-3">
+        <div class="card h-100 shadow-sm">
+          <div class="skeleton-img shimmer"></div>
+          <div class="card-body">
+            <div class="placeholder-wave mb-2">
+              <span class="placeholder col-7"></span>
+              <span class="placeholder col-4"></span>
+            </div>
+            <div class="placeholder-wave mb-2 d-flex justify-content-between">
+              <span class="placeholder col-3"></span>
+              <span class="placeholder col-2"></span>
+            </div>
+            <div class="placeholder-wave mb-3">
+              <span class="placeholder col-5"></span>
+            </div>
+            <div class="placeholder-wave">
+              <span class="placeholder btn btn-primary disabled col-12"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error (HTTP/network), centered -->
+  <div *ngIf="!loading && errorMsg" class="row min-vh-75">
+    <div class="col-12 d-flex justify-content-center align-items-center">
+      <div class="alert alert-danger text-center shadow-sm">
+        ⚠️ {{ errorMsg }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Restaurant Info -->
+  <div class="row mb-3" *ngIf="!loading && restaurant">
     <div class="col-12">
       <div class="card shadow-sm">
         <div class="card-body">
           <h3 class="card-title">{{ restaurant?.name }}</h3>
           <p class="card-text">📍 {{ restaurant?.address }}</p>
           <p class="card-text"><strong>⏱️ Delivery:</strong> {{ restaurant?.deliveryTime }}</p>
-          <p class="card-text"><strong>🍴 Type:</strong> {{ restaurant?.foodType }}</p>
+          <p class="card-text"><strong>🍴 Type: </strong>{{ (restaurant?.foodType ?? '') | uppercase }} </p>
           <p class="card-text">
             <strong>⭐ Rating:</strong>
             <span class="badge bg-success ms-2">{{ restaurant?.rating }}</span>
@@ -18,88 +91,92 @@
     </div>
   </div>
 
-<!-- Veg / NonVeg + Dropdown Filters in one row -->
-<div class="row mb-3">
-  <div class="col-12 d-flex justify-content-center align-items-center gap-3">
-    
-    <!-- Veg/NonVeg buttons -->
-    <div class="btn-group" role="group">
-      <button type="button" class="btn btn-outline-success" (click)="filterByType('Veg')">Veg</button>
-      <button type="button" class="btn btn-outline-danger" (click)="filterByType('NonVeg')">Non-Veg</button>
-    </div>
+  <!-- Filters -->
+  <div class="row mb-3" *ngIf="!loading && restaurant">
+    <div class="col-12 d-flex justify-content-center align-items-center gap-3 flex-wrap">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-outline-success" (click)="filterByType('Veg')" [disabled]="menuEmpty">Veg</button>
+        <button type="button" class="btn btn-outline-danger" (click)="filterByType('NonVeg')" [disabled]="menuEmpty">Non-Veg</button>
+      </div>
 
-    <!-- Dropdown filters -->
-    <div class="dropdown">
-      <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterMenuButton"
-              data-bs-toggle="dropdown" aria-expanded="false">
-        Filter Menu
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="filterMenuButton">
-        <!-- Price Filters -->
-        <li><button class="dropdown-item" (click)="filterByPrice('low')">Price: Low (₹0 - ₹100)</button></li>
-        <li><button class="dropdown-item" (click)="filterByPrice('medium')">Price: Medium (₹101 - ₹250)</button></li>
-        <li><button class="dropdown-item" (click)="filterByPrice('high')">Price: High (₹251+)</button></li>
-        <li><hr class="dropdown-divider"></li>
-        <!-- Rating Filters -->
-        <li><button class="dropdown-item" (click)="filterByRating(4.5)">Rating: 4.5+</button></li>
-        <li><button class="dropdown-item" (click)="filterByRating(3.5)">Rating: 3.5+</button></li>
-        <li><hr class="dropdown-divider"></li>
-        <!-- Reset -->
-        <li><button class="dropdown-item" (click)="resetFilter()">Show All</button></li>
-      </ul>
-    </div>
-
-  </div>
-</div>
-
-
-
-<div class="row">
-  <!-- Show menu items if any -->
-  <div *ngFor="let item of filteredMenu; trackBy: trackById" class="col-12 col-sm-6 col-lg-4 mb-3">
-    <div class="card h-100 shadow-sm">
-      
-      <!-- Food Image -->
-      <img [src]="item.image" alt="{{ item.name }}" class="card-img-top food-img">
-
-      <div class="card-body text-center">
-        <!-- Row with food type, name, and rating -->
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <!-- Food type badge -->
-          <span class="badge bg-success" *ngIf="item.foodType === 'Veg'">Veg</span>
-          <span class="badge bg-danger" *ngIf="item.foodType === 'NonVeg'">Non-Veg</span>
-
-          <!-- Food name -->
-          <h5 class="card-title mb-0 flex-grow-1 text-center">{{ item.name }}</h5>
-
-          <!-- Rating badge (green) -->
-          <span class="badge bg-success">⭐ {{ item.rating }}</span>
-        </div>
-
-        <!-- Price -->
-        <p class="card-text fw-bold fs-4">₹{{ item.price }}</p>
-
-        <!-- Quantity Selector -->
-        <div class="d-flex justify-content-center align-items-center mb-2">
-          <button class="btn btn-sm btn-outline-secondary" (click)="decreaseQuantity(item)">-</button>
-          <span class="mx-2">{{ item.quantity || 0 }}</span>
-          <button class="btn btn-sm btn-outline-secondary" (click)="increaseQuantity(item)">+</button>
-        </div>
-
-        <!-- Add to Cart -->
-        <button class="btn btn-primary w-100" (click)="addToCart(item)">
-          Add to Cart
+      <div class="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterMenuButton"
+                data-bs-toggle="dropdown" aria-expanded="false" [disabled]="menuEmpty">
+          Filter Menu
         </button>
+        <ul class="dropdown-menu" aria-labelledby="filterMenuButton">
+          <li><button class="dropdown-item" (click)="filterByPrice('low')">Price: Low (₹0 - ₹100)</button></li>
+          <li><button class="dropdown-item" (click)="filterByPrice('medium')">Price: Medium (₹101 - ₹250)</button></li>
+          <li><button class="dropdown-item" (click)="filterByPrice('high')">Price: High (₹251+)</button></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><button class="dropdown-item" (click)="filterByRating(4.5)">Rating: 4.5+</button></li>
+          <li><button class="dropdown-item" (click)="filterByRating(3.5)">Rating: 3.5+</button></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><button class="dropdown-item" (click)="resetFilter()">Show All</button></li>
+        </ul>
+      </div>
+
+      <button type="button" class="btn btn-outline-secondary"
+              (click)="resetFilter()" [disabled]="menuEmpty">
+        Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- No menu from backend -->
+  <div *ngIf="!loading && restaurant && menuEmpty" class="row min-vh-60">
+    <div class="col-12 d-flex justify-content-center align-items-center">
+      <div class="alert alert-warning text-center shadow-sm">
+        🗒️ No menu found for this restaurant. Please check back later.
       </div>
     </div>
   </div>
 
-  <!-- Show "Not Found" if no items -->
-  <div *ngIf="filteredMenu.length === 0" class="col-12">
-    <div class="alert alert-warning text-center">
-      🚫 No items found matching your filter criteria.
-      To see All menu go to filters and click see All
+  <!-- Menu List -->
+  <div class="row" *ngIf="!loading && !menuEmpty && filteredMenu && filteredMenu.length > 0">
+    <div *ngFor="let item of filteredMenu; trackBy: trackById" class="col-12 col-sm-6 col-lg-4 mb-3">
+      <div class="card h-100 shadow-sm">
+        <img [src]="item.image" alt="{{ item.name }}" class="card-img-top food-img">
+
+        <div class="card-body text-center">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-success" *ngIf="item.foodType === 'VEG'">Veg</span>
+            <span class="badge bg-danger" *ngIf="item.foodType === 'NON_VEG'">Non-Veg</span>
+            <h5 class="card-title mb-0 flex-grow-1 text-center">{{ item.name }}</h5>
+            <span class="badge bg-success">⭐ {{ item.rating }}</span>
+          </div>
+
+          <p class="card-text fw-bold fs-4">₹{{ item.price }}</p>
+
+          <div class="d-flex justify-content-center align-items-center mb-2">
+            <button class="btn btn-sm btn-outline-secondary" (click)="decreaseQuantity(item)">-</button>
+            <span class="mx-2">{{ item.quantity || 0 }}</span>
+            <button class="btn btn-sm btn-outline-secondary" (click)="increaseQuantity(item)">+</button>
+          </div>
+
+          <button class="btn btn-primary w-100" (click)="addToCart(item)">
+            Add to Cart
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- Filter produced zero results -->
+  <div *ngIf="!loading && restaurant && !menuEmpty && filteredMenu && filteredMenu.length === 0" class="row min-vh-60">
+    <div class="col-12 d-flex justify-content-center align-items-center">
+      <div class="alert alert-warning text-center shadow-sm">
+        🚫 No items found matching your filter criteria. Use "Reset" to see all menu items.
+      </div>
+    </div>
+  </div>
+
+  <!-- Restaurant not found (fallback when no specific errorMsg) -->
+  <div *ngIf="!loading && !restaurant && !errorMsg" class="row min-vh-60">
+    <div class="col-12 d-flex justify-content-center align-items-center">
+      <div class="alert alert-danger text-center shadow-sm">
+        ⚠️ Restaurant not found. Please check        ⚠️ Restaurant not found. Please check the link or try again.
+      </div>
+    </div>
+  </div>
 
