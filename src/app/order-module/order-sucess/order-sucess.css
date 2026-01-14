@@ -1,0 +1,111 @@
+
+.success-wrap {
+  max-width: 560px;
+  margin: 48px auto;
+  padding: 24px;
+  text-align: center;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+.muted { color: #6b7280; }
+
+.checkmark {
+  position: relative;
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 16px;
+}
+
+.circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #d1fae5;           /* light green */
+  border: 4px solid #10b981;     /* emerald */
+  box-shadow: 0 8px 24px rgba(16,185,129,0.25);
+  animation: pop 400ms ease-out forwards;
+}
+
+.check {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 56px;
+  height: 28px;
+  border-bottom: 8px solid #10b981;
+  border-left: 8px solid #10b981;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  transform-origin: center;
+  opacity: 0;
+  animation: draw 600ms 250ms ease-out forwards;
+}
+
+@keyframes pop { 0% { transform: scale(0.6); } 100% { transform: scale(1); } }
+@keyframes draw { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+.summary { text-align: left; margin-top: 24px; }
+.summary h3 { margin: 16px 0 8px; }
+.addr div { margin: 2px 0; }
+
+.items { list-style: none; padding: 0; margin: 0 0 8px; }
+.items li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed #e5e7eb;
+}
+.items .name { font-weight: 500; }
+.items .qty { color: #6b7280; }
+
+.footer { margin-top: 12px; }
+.footer .row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.actions { margin-top: 24px; }
+.primary {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.primary:hover { background: #0ea5e9; }
+
+
+
+
+/* new code 
+ */
+ 
+.loader-wrap {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  min-height: 240px;
+  text-align: center;
+}
+
+.spinner {
+  width: 56px;
+  height: 56px;
+  border: 4px solid rgba(0,0,0,0.12);
+  border-top-color: #2ecc71; /* success color */
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+.loader-text { font-size: 0.95rem; color: #666; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.success-wrap { animation: fadeIn 240ms ease-out both; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

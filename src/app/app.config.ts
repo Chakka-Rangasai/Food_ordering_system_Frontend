@@ -2,7 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { jwtInterceptor } from '../jwt.interceptor';
+// import { jwtInterceptor } from '../jwt.interceptor';
 
 // 1. Import these two
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([jwtInterceptor]) 
+      // withInterceptors([jwtInterceptor]) 
     ),
     
     // 2. Add Animations and Toastr providers

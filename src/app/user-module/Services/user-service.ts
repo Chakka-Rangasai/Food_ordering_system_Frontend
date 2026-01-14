@@ -11,7 +11,7 @@ export class UserService {
   isLoggedIn$ = this.loggedIn.asObservable();
   constructor(private http: HttpClient) {}
   private hasToken(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('jwtToken');
   }
   registerUser(userData: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/register`, userData);

@@ -1,0 +1,45 @@
+<div class="orders-container">
+  <h2>My Orders</h2>
+
+  <!-- Skeleton Loader -->
+  <div *ngIf="loading" class="skeleton-list">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3]">
+      <div class="skeleton-left">
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+      </div>
+      <div class="skeleton-right">
+        <div class="skeleton-badge"></div>
+        <div class="skeleton-button"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && orders.length === 0" class="empty-state">
+    <p>😕 No orders found. Hungry? Place your first order now!</p>
+  </div>
+
+  <!-- Orders List -->
+  <div *ngFor="let order of orders" class="order-summary-card">
+    <div class="summary-left">
+      <div class="order-id">Order #{{ order.orderId }}</div>
+      <h6 class="restaurant-name">{{ order.restaurantName }}</h6>
+      <p class="restaurant-location">📍 {{ order.restaurantLocation }}</p>
+      <div class="order-meta">
+        🍴 Items: {{ order.items }} &nbsp;&nbsp;&nbsp;&nbsp; Bill Amount: ₹{{ order.totalAmount | number:'1.2-2' }}
+      </div>
+      <div class="order-date">
+        🕒 Ordered: {{ order.createdAt | date:'medium' }}
+      </div>
+    </div>
+
+    <div class="summary-right">
+      <span class="status-badge" [ngClass]="order.status.toLowerCase()">
+        {{ order.status }}
+      </span>
+      <button class="details-btn" (click)="viewDetails(order)">View details →</button>
+    </div>
+  </div>
+</div>

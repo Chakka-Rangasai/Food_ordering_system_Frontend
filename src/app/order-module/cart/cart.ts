@@ -3,11 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CartService, CartItem } from '../Services/cart-service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { OrderService } from '../Services/order-service';
+import { CreateOrderRequest } from '../Services/orderModels';
+import { getOrCreateIdempotencyKey, clearIdempotencyKey, idempotencyKey } from '../utilis/idempotent';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-cart',
-  imports: [CommonModule, FormsModule, MatSnackBarModule,RouterLink],
+  standalone: true, // Assuming Angular 17+ based on 'imports' array
+  imports: [CommonModule, FormsModule, MatSnackBarModule, RouterLink],
   templateUrl: './cart.html',
   styleUrls: ['./cart.css'],
 })
@@ -16,64 +21,67 @@ export class Cart implements OnInit {
   deliveryFee = 12;
   packingCost = 7;
   gstRate = 0.04;
+  isPlacing = false;
+
   deliveryAddress = {
     name: '',
     phone: '',
     street: '',
     pincode: ''
   };
-  constructor(private cartService: CartService, private snackBar: MatSnackBar) {}
+
+  constructor(
+    private cartService: CartService,
+    private snackBar: MatSnackBar,
+    private orderService: OrderService,
+    private router: Router,
+  ) {}
+
   ngOnInit(): void {
     this.loadCartData();
   }
+
   loadCartData(): void {
     this.cartService.getCart().subscribe({
       next: (items) => {
         this.cartItems = items;
-        console.log('Cart items loaded from backend:', items);
+        console.log('Cart items loaded:', items);
       },
       error: (err) => {
         console.error('Failed to load cart', err);
-        this.snackBar.open('Error loading cart. Please try again.', 'Close', { duration: 3000 });
+        this.snackBar.open('Error loading cart.', 'Close', { duration: 3000 });
       }
     });
   }
- updateQuantity(item: CartItem, change: number): void {
-  const newQuantity = item.quantity + change;
-  if (newQuantity <= 0) {
-    if (item.id) this.removeItem(item.id);
-  } else {
-    this.cartService.updateCartQuantity(item.id!, newQuantity).subscribe({
-      next: (res: CartItem) => {
-        item.quantity = res.quantity;
-        item.price = res.price; 
-        console.log('Backend updated quantity and price:', res);
-      },
-      error: (err) => {
-        this.snackBar.open('Update failed', 'Close', { duration: 2000 });
-      }
-    });
-  }
-}
- removeItem(dbId: number): void {
-  this.cartService.removeFromCart(dbId).subscribe({
-    next: (response) => {
-      this.cartItems = this.cartItems.filter(item => item.id !== dbId);
-      this.snackBar.open('Item removed successfully', 'Close', { 
-        duration: 3000,
-        verticalPosition: 'top' 
+
+  updateQuantity(item: CartItem, change: number): void {
+    const newQuantity = item.quantity + change;
+    if (newQuantity <= 0) {
+      if (item.id) this.removeItem(item.id);
+    } else {
+      this.cartService.updateCartQuantity(item.id!, newQuantity).subscribe({
+        next: (res: CartItem) => {
+          item.quantity = res.quantity;
+          item.price = res.price;
+        },
+        error: (err) => this.snackBar.open('Update failed', 'Close', { duration: 2000 })
       });
-      console.log(response);
-    },
-    error: (err) => {
-      console.error('Delete failed', err);
-      this.snackBar.open('Failed to remove item', 'Close', { duration: 3000 });
     }
-  });
-}
+  }
+
+  removeItem(dbId: number): void {
+    this.cartService.removeFromCart(dbId).subscribe({
+      next: () => {
+        this.cartItems = this.cartItems.filter(item => item.id !== dbId);
+        this.snackBar.open('Item removed', 'Close', { duration: 3000, verticalPosition: 'top' });
+      },
+      error: () => this.snackBar.open('Failed to remove item', 'Close', { duration: 3000 })
+    });
+  }
+
   getItemsCost(): number {
-  return this.cartItems.reduce((sum, item) => sum + item.price, 0);
-}
+    return this.cartItems.reduce((sum, item) => sum + item.price, 0);
+  }
 
   getGST(): number {
     return this.getItemsCost() * this.gstRate;
@@ -82,49 +90,60 @@ export class Cart implements OnInit {
   getGrandTotal(): number {
     return this.getItemsCost() + this.deliveryFee + this.packingCost + this.getGST();
   }
+
   placeOrder() {
-    if (!this.deliveryAddress.name ||
-        !this.deliveryAddress.phone ||
-        !this.deliveryAddress.street ||
-        !this.deliveryAddress.pincode) {
-      this.snackBar.open('Please fill all delivery address details.', 'Close', { duration: 9000, horizontalPosition: 'center', verticalPosition: 'top' });
+    // 1. Validation Logic
+    if (!this.deliveryAddress.name || !this.deliveryAddress.phone || !this.deliveryAddress.street || !this.deliveryAddress.pincode) {
+      this.snackBar.open('Please fill all delivery details.', 'Close', { duration: 5000, verticalPosition: 'top' });
       return;
     }
 
-    if (this.deliveryAddress.phone.length !== 10 || !/^\d{10}$/.test(this.deliveryAddress.phone)) {
-      this.snackBar.open('Phone number must be 10 digits.', 'Close', {
-        duration: 9000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top'
-      });
+    if (this.cartItems.length === 0) {
+      this.snackBar.open('Your cart is empty.', 'Close', { duration: 5000, verticalPosition: 'top' });
       return;
     }
 
-    if (this.deliveryAddress.pincode.length !== 6 || !/^\d{6}$/.test(this.deliveryAddress.pincode)) {
-      this.snackBar.open('Pincode must be 6 digits.', 'Close', { duration: 9000, horizontalPosition: 'center', verticalPosition: 'top' });
-      return;
-    }
+    // 2. Prepare Payload
+    const key = getOrCreateIdempotencyKey('create-order');
+    const payload: CreateOrderRequest = {
+      deliveryAddress: this.deliveryAddress,
+      items: this.cartItems.map(ci => ({
+        restaurantId: ci.restaurantId,
+        itemId: ci.itemId,
+        name: ci.name,
+        price: ci.price,
+        quantity: ci.quantity
+      })),
+      totalAmount: parseFloat(this.getGrandTotal().toFixed(2)),
+      idempotencyKey: key
+    };
 
-    console.log('Order placed:', {
-      items: this.cartItems,
-      total: this.getGrandTotal(),
-      deliveryAddress: this.deliveryAddress
+    this.isPlacing = true;
+
+    // 3. Execution
+    this.orderService.createOrder(payload).subscribe({
+      next: (order) => {
+        clearIdempotencyKey('create-order');
+        
+        // Success Logic: Clear cart and Navigate
+        this.cartService.clearCart().subscribe({
+          next: () => {
+            this.cartItems = [];
+            this.router.navigate(['/order-success'], { state: { order } });
+          },
+          error: (err) => {
+            console.error('Order placed, but cart clear failed', err);
+            this.router.navigate(['/order-success'], { state: { order } });
+          }
+        });
+      },
+      error: (err: HttpErrorResponse) => {
+        this.isPlacing = false;
+        this.snackBar.open(`❌ Failed to place order: ${err.message}`, 'Close', { duration: 9000, verticalPosition: 'top' });
+      },
+      complete: () => {
+        this.isPlacing = false;
+      }
     });
-    this.cartService.clearCart().subscribe({
-    next: (response) => {
-      this.cartItems = [];
-      this.snackBar.open('✅ Order placed Successfully', 'Close', { 
-        duration: 5000, 
-        horizontalPosition: 'center', 
-        verticalPosition: 'top'
-      });
-
-      console.log('Backend response:', response);
-    },
-    error: (err) => {
-      console.error('Failed to clear cart after order:', err);
-      alert('Order processed, but failed to clear cart in database.');
-    }
-  });
   }
 }

@@ -1,83 +1,231 @@
-import { Component } from '@angular/core';
+
+import { Component, OnDestroy /* Optional: OnInit */ } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize } from 'rxjs/operators';
+import { ChangeDetectorRef, NgZone } from '@angular/core';
+import { RestaurantsService } from '../services/restaurant';
 
 @Component({
   selector: 'app-restaurant-list',
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './restaurant-list.html',
   styleUrls: ['./restaurant-list.css'],
 })
-export class RestaurantList {
-  constructor(private router: Router) {}
+export class RestaurantList implements OnDestroy {
+  constructor(
+    private router: Router,
+    private restaurantsService: RestaurantsService,
+    private cdr: ChangeDetectorRef,
+    private snackBar: MatSnackBar,
+    private zone: NgZone
+  ) {}
 
+  // ---- UI State ----
   searchText: string = '';
-  currentPage: number = 1;
-  pageSize: number = 6;
+  selectedFoodType: 'veg' | 'nonveg' | 'both' = 'both';
 
-  // 👇 Add this property (default to "both")
-  selectedFoodType: string = 'both';
+  currentPage: number = 1;             // 1-based page index for UI
+  pageSize: number = 51;               // default page size
+  pageSizeOptions: number[] = [51, 100, 200, 500, 1000]; // new
 
- restaurants = [
-  { id: 1, name: 'Spice Garden', rating: 4.5, address: 'MG Road, Pune', deliveryTime: '30-40 mins', foodType: 'veg' },
-  { id: 2, name: 'Ocean Breeze', rating: 4.2, address: 'FC Road, Pune', deliveryTime: '25-35 mins', foodType: 'both' },
-  { id: 3, name: 'Pizza Hub', rating: 4.8, address: 'Baner, Pune', deliveryTime: '20-30 mins', foodType: 'both' },
-  { id: 4, name: 'Royal Tandoor', rating: 4.0, address: 'Kothrud, Pune', deliveryTime: '35-45 mins', foodType: 'nonveg' },
-  { id: 5, name: 'Green Leaf', rating: 4.3, address: 'JM Road, Pune', deliveryTime: '30-40 mins', foodType: 'veg' },
-  { id: 6, name: 'Urban Masala', rating: 4.6, address: 'Viman Nagar, Pune', deliveryTime: '25-35 mins', foodType: 'both' },
-  { id: 7, name: 'Golden Dragon', rating: 4.1, address: 'Camp, Pune', deliveryTime: '40-50 mins', foodType: 'nonveg' },
-  { id: 8, name: 'Cafe Delight', rating: 4.7, address: 'Koregaon Park, Pune', deliveryTime: '20-30 mins', foodType: 'both' },
-  { id: 9, name: 'BBQ Nation', rating: 4.4, address: 'Senapati Bapat Road, Pune', deliveryTime: '35-45 mins', foodType: 'both' },
-  { id: 10, name: 'Burger Shack', rating: 4.0, address: 'Aundh, Pune', deliveryTime: '25-35 mins', foodType: 'both' },
-  { id: 11, name: 'Tandoor Treats', rating: 4.2, address: 'Hinjewadi, Pune', deliveryTime: '30-40 mins', foodType: 'nonveg' },
-  { id: 12, name: 'Royal Feast', rating: 4.5, address: 'Shivaji Nagar, Pune', deliveryTime: '25-35 mins', foodType: 'both' },
-  { id: 13, name: 'Veggie Delight', rating: 4.3, address: 'Kalyani Nagar, Pune', deliveryTime: '20-30 mins', foodType: 'veg' },
-  { id: 14, name: 'Seafood Bay', rating: 4.6, address: 'Camp, Pune', deliveryTime: '40-50 mins', foodType: 'nonveg' },
-  { id: 15, name: 'Italiano Pizza', rating: 4.7, address: 'Baner, Pune', deliveryTime: '20-30 mins', foodType: 'both' },
-  { id: 16, name: 'Mughal Darbar', rating: 4.1, address: 'Kondhwa, Pune', deliveryTime: '35-45 mins', foodType: 'nonveg' },
-  { id: 17, name: 'Street Eats', rating: 4.0, address: 'Swargate, Pune', deliveryTime: '25-35 mins', foodType: 'both' },
-  { id: 18, name: 'Cafe Aroma', rating: 4.5, address: 'Koregaon Park, Pune', deliveryTime: '20-30 mins', foodType: 'both' },
-  { id: 19, name: 'Grill House', rating: 4.4, address: 'Magarpatta, Pune', deliveryTime: '30-40 mins', foodType: 'nonveg' },
-  { id: 20, name: 'Royal Curry', rating: 4.2, address: 'Hadapsar, Pune', deliveryTime: '35-45 mins', foodType: 'both' },
-  { id: 21, name: 'Urban Tandoor', rating: 4.6, address: 'Wakad, Pune', deliveryTime: '25-35 mins', foodType: 'nonveg' },
-  { id: 22, name: 'Desi Zaika', rating: 4.3, address: 'Nigdi, Pune', deliveryTime: '30-40 mins', foodType: 'both' },
-  { id: 23, name: 'Spicy Affair', rating: 4.1, address: 'Camp, Pune', deliveryTime: '35-45 mins', foodType: 'both' },
-  { id: 24, name: 'Punjabi Rasoi', rating: 4.5, address: 'Kothrud, Pune', deliveryTime: '25-35 mins', foodType: 'nonveg' },
-  { id: 25, name: 'South Spice', rating: 4.4, address: 'Karve Nagar, Pune', deliveryTime: '30-40 mins', foodType: 'veg' },
-  { id: 26, name: 'Chinese Wok', rating: 4.2, address: 'FC Road, Pune', deliveryTime: '25-35 mins', foodType: 'both' },
-  { id: 27, name: 'Biryani House', rating: 4.6, address: 'Hadapsar, Pune', deliveryTime: '30-40 mins', foodType: 'nonveg' },
-  { id: 28, name: 'Cafe Mocha', rating: 4.3, address: 'Koregaon Park, Pune', deliveryTime: '20-30 mins', foodType: 'both' },
-  { id: 29, name: 'Royal Zaika', rating: 4.1, address: 'Swargate, Pune', deliveryTime: '35-45 mins', foodType: 'nonveg' },
-  { id: 30, name: 'Urban Eats', rating: 4.5, address: 'Viman Nagar, Pune', deliveryTime: '25-35 mins', foodType: 'both' }
-];
+  totalPages: number = 0;
+  totalElements: number = 0;
 
-  // ✅ Filter + Pagination Logic
-  get filteredRestaurants() {
-    return this.restaurants.filter(r =>
-      r.name.toLowerCase().includes(this.searchText.toLowerCase()) &&
-      (this.selectedFoodType === 'both' || r.foodType === this.selectedFoodType)
+  // ---- Data & Flags ----
+  restaurants: any[] = [];
+  loading = true;
+  errorMsg = '';
+
+  // ---- Skeleton ----
+  skeletonItems = Array.from({ length: 12 });
+
+  // ---- Search stream ----
+  private search$ = new Subject<string>();
+  private sub = new Subscription();
+
+  ngOnInit(): void {
+    // 🔹 (Optional) Restore page size from localStorage
+    const savedSize = localStorage.getItem('restaurants_page_size');
+    if (savedSize) {
+      const n = Number(savedSize);
+      if (this.pageSizeOptions.includes(n)) {
+        this.pageSize = n;
+      }
+    }
+
+    // ✅ Initial fetch
+    this.fetchRestaurants();
+
+    // ✅ Debounced search
+    this.sub.add(
+      this.search$
+        .pipe(debounceTime(300), distinctUntilChanged())
+        .subscribe((text) => {
+          this.searchText = text ?? '';
+          this.currentPage = 1;
+          this.fetchRestaurants();
+        })
     );
+     this.cdr.markForCheck();
+    this.cdr.detectChanges();
   }
 
-  get totalPages() {
-    return Math.ceil(this.filteredRestaurants.length / this.pageSize);
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
-  get paginatedRestaurants() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredRestaurants.slice(start, start + this.pageSize);
+  // ---- Core fetch ----
+  private fetchRestaurants(): void {
+    this.zone.run(() => {
+      this.loading = true;
+      this.errorMsg = '';
+      this.cdr.markForCheck();
+    });
+
+    this.restaurantsService
+      .getRestaurants({
+        search: this.searchText,
+        type: this.selectedFoodType,
+        page: this.currentPage - 1, // backend expects 0-based
+        size: this.pageSize,        //  uses the selected page size
+        sort: 'name,asc',
+      })
+      .pipe(
+        finalize(() => {
+          this.zone.run(() => {
+            this.loading = false;
+            this.cdr.markForCheck();
+            // this.cdr.detectChanges();  //This is also we can use but not recommended when the need initial refresh
+          });
+        })
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.zone.run(() => {
+            this.restaurants = Array.isArray(res?.content) ? res.content : [];
+            this.totalPages = Number(res?.totalPages || Math.ceil((Number(res?.totalElements || 0)) / this.pageSize));
+            this.totalElements = Number(res?.totalElements || 0);
+            // this.cdr.detectChanges();
+            this.cdr.markForCheck();
+          });
+        },
+        error: (err: HttpErrorResponse | any) => {
+          console.error('Failed to load restaurants', err);
+          this.zone.run(() => {
+            // this.errorMsg = 'Failed to load restaurants. Please try again.';
+            this.loading = false;
+            this.errorMsg = this.httpErrorToMessage(err);
+            this.restaurants = [];
+            this.totalPages = 0;
+            this.totalElements = 0;
+      const snackRef = this.snackBar.open(
+          typeof err.error === 'string' ? err.error : this.errorMsg,
+          'Close',
+          {
+            duration: 9000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          }
+        );
+
+    snackRef.onAction().subscribe(() => {
+      // example: refresh page
+      window.location.reload();
+      this.router.navigate(['/restaurantlist']);
+    });
+
+            this.cdr.detectChanges();
+            
+          });
+        },
+      });
   }
 
-  nextPage() {
-    if (this.currentPage < this.totalPages) this.currentPage++;
+    private httpErrorToMessage(err: any): string {
+    if (err?.status === 0) return 'Network error: server unreachable or CORS blocked.';
+    if (err?.status === 401) return 'Un Authorized By using valid key only authorized';
+    if (err?.status === 403) { // Use backend-provided message if available
+     return err?.error || 'Access denied (403).'; }
+    if (err?.status === 404) return 'Restaurant not found (404).';
+    if (err?.status === 500) return 'Server error (500).';
+    return 'An error occurred while fetching restaurant details.';
+  }
+  // ---- Handlers ----
+  onSearchInput(text: string): void {
+    this.search$.next(text ?? '');
   }
 
-  prevPage() {
-    if (this.currentPage > 1) this.currentPage--;
+  onTypeChange(): void {
+    this.currentPage = 1;
+    this.fetchRestaurants();
   }
 
-  viewDetails(restaurant: any) {
-    alert(`Opening details for ${restaurant.name}`);
-    this.router.navigate(['/restaurantdetails'], { queryParams: { id: restaurant.id } });
+  // 🔹 NEW: Page-size change handler
+  onPageSizeChange(size: number): void {
+    this.pageSize = Number(size);
+    // (Optional) Persist choice
+    localStorage.setItem('restaurants_page_size', String(this.pageSize));
+    // Reset to first page and refetch
+    this.currentPage = 1;
+    this.fetchRestaurants();
+  }
+
+  // ---- Pagination ----
+  goToPage(p: number): void {
+    if (p < 1 || p > this.totalPages || p === this.currentPage) return;
+    this.currentPage = p;
+    this.fetchRestaurants();
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.fetchRestaurants();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.fetchRestaurants();
+    }
+  }
+
+  get pageNumbers(): number[] {
+    const total = this.totalPages;
+    const current = this.currentPage;
+    const maxButtons = 6;
+
+    if (total <= maxButtons) return Array.from({ length: total }, (_, i) => i + 1);
+
+    const start = Math.max(1, current - 3);
+    const normalizedStart = Math.max(1, Math.min(start, total - maxButtons + 1));
+    return Array.from({ length: maxButtons }, (_, i) => normalizedStart + i);
+  }
+
+  // ---- Helpers ----
+  formatRating(r: any): string {
+    const n = typeof r === 'string' ? parseFloat(r) : r;
+    if (isNaN(n)) return String(r ?? '');
+    return Number(n).toFixed(1);
+  }
+
+  trackById = (_: number, r: any) => r?.id;
+
+  viewDetails(restaurant: any): void {
+    this.router.navigate(['/restaurantdetails'], { queryParams: { id: restaurant?.id } });
+  }
+
+  clearSearch(): void {
+    if (!this.searchText) return;
+    this.searchText = '';
+    this.currentPage = 1;
+    this.fetchRestaurants();
   }
 }

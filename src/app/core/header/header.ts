@@ -46,6 +46,6 @@ export class Header {
     this.cartService.clearInternalCart();
     console.log('User logged out');
     this.router.navigate(['/']);
-    localStorage.removeItem('token');
+    localStorage.removeItem('jwtToken');
   }
 }

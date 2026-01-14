@@ -1,0 +1,186 @@
+/* .orders-container {
+   max-width:900px;
+    margin:0 auto; 
+    padding:16px; }
+.order-summary-card {
+   display:flex;
+    justify-content:space-between; 
+    align-items:center; 
+    padding:12px;
+     border:1px solid #eee;
+      border-radius:8px;
+       margin-bottom:10px;
+        background:#fff;
+       }
+.summary-left { 
+  min-width:0;
+ }
+.order-id {
+   font-weight:700; 
+  }
+.order-meta, .order-date { 
+  color:#666; 
+  font-size:0.9rem;
+ }
+.summary-right {
+   display:flex; 
+   flex-direction:column;
+    gap:8px; 
+    align-items:flex-end; 
+  }
+.status { 
+  background:#f3f3f3;
+   padding:6px 10px; 
+   border-radius:6px; 
+   font-size:0.9rem; 
+  }
+button {
+   background:#007bff;
+    color:#fff;
+     border:none;
+      padding:8px 12px;
+       border-radius:6px; 
+       cursor:pointer; }
+button:hover { 
+  opacity:0.95; 
+} */
+
+.orders-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.order-summary-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border-left: 5px solid #007bff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.order-summary-card:hover {
+  transform: translateY(-3px);
+}
+
+.summary-left {
+  flex: 1;
+}
+
+.restaurant-name {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.restaurant-location {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.order-meta, .order-date {
+  font-size: 0.85rem;
+  /* margin-top: 2px; */
+}
+
+.summary-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 140px;
+}
+
+.status-badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-transform: capitalize;
+}
+
+.status-badge.pending { background: #f18d0a; color:white; }
+.status-badge.preparing { background: #fff3cd; color: #856404; }
+.status-badge.out_for_delivery { background: #cce5ff; color: #004085; }
+.status-badge.delivered { background: #d4edda; color: #155724; }
+
+.details-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.details-btn:hover {
+  background: #0056b3;
+}
+
+/* Skeleton Loader */
+.skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.skeleton-card {
+  display: flex;
+  justify-content: space-between;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.skeleton-line {
+  height: 12px;
+  background: #ddd;
+  border-radius: 4px;
+  margin: 6px 0;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+.skeleton-badge {
+  width: 60px;
+  height: 20px;
+  background: #ddd;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-button {
+  width: 80px;
+  height: 28px;
+  background: #ddd;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { background-color: #ddd; }
+  50% { background-color: #ccc; }
+  100% { background-color: #ddd; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .order-summary-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .summary-right {
+    align-items: flex-start;
+    margin-top: 0.5rem;
+  }
+}

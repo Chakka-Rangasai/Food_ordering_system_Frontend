@@ -47,7 +47,7 @@ export class UserLogin {
           closeButton: true
         });
         this.userService.setLoginState(true);
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('jwtToken', response.token);
         console.log('Login Successful');
         this.cartService.getCart().subscribe({
         next: () => {
