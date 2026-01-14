@@ -21,6 +21,7 @@ export class Cart implements OnInit {
   deliveryFee = 12;
   packingCost = 7;
   gstRate = 0.04;
+  errorMsg = '';
   isPlacing = false;
 
   deliveryAddress = {
@@ -54,6 +55,7 @@ export class Cart implements OnInit {
     });
   }
 
+  // Keep temporary remove/update exactly as before
   updateQuantity(item: CartItem, change: number): void {
     const newQuantity = item.quantity + change;
     if (newQuantity <= 0) {
@@ -103,8 +105,11 @@ export class Cart implements OnInit {
       return;
     }
 
+   
+const key = getOrCreateIdempotencyKey('create-order');
+
+    // 2) Build payload WITH idempotencyKey (no headers)
     // 2. Prepare Payload
-    const key = getOrCreateIdempotencyKey('create-order');
     const payload: CreateOrderRequest = {
       deliveryAddress: this.deliveryAddress,
       items: this.cartItems.map(ci => ({
@@ -138,12 +143,25 @@ export class Cart implements OnInit {
         });
       },
       error: (err: HttpErrorResponse) => {
+        console.error('Order failed:', err);
+  
+        // Keep the key in localStorage so user can retry without duplication
+        
+        
+        this.snackBar.open(`${err.message}`, 'Close', {
+          duration: 9000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
         this.isPlacing = false;
         this.snackBar.open(`❌ Failed to place order: ${err.message}`, 'Close', { duration: 9000, verticalPosition: 'top' });
       },
       complete: () => {
         this.isPlacing = false;
       }
+         
+
+
     });
   }
 }

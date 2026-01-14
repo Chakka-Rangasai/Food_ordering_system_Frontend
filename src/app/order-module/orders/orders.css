@@ -104,7 +104,8 @@ button:hover {
   text-transform: capitalize;
 }
 
-.status-badge.pending { background: #f18d0a; color:white; }
+.status-badge.placed { background: #f18d0a; color:white; }
+.status-badge.pending { background: #e81b04; color:white; }
 .status-badge.preparing { background: #fff3cd; color: #856404; }
 .status-badge.out_for_delivery { background: #cce5ff; color: #004085; }
 .status-badge.delivered { background: #d4edda; color: #155724; }

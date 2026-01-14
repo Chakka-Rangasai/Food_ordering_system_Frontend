@@ -22,8 +22,6 @@ export interface CreateOrderRequest {
 
 /** Response item */
 export interface OrderItemResponse {
-  orderItemId: number;
-  menuItemId: number;
   name: string;
   price: number;
   quantity: number;
@@ -44,16 +42,14 @@ export interface OrderResponse {
 }
 
 
-// {
-//         "orderId": 38,
-//         "restaurantName": "The Green Spoon",
-//         "restaurantLocation": "500 Central Ave, Silicon Valley",
-//         "items": 5,
-//         "status": "PENDING",
-//         "totalAmount": 1464.60,
-//         "createdAt": "2026-01-05T17:46:57.413910Z",
-//         "updatedAt": "2026-01-05T17:46:57.382078Z"
-//     },
+export interface OrderCreatedResponse {
+  orderId: number;
+  status: 'PENDING' | 'PLACED' | 'FAILED' | 'PENDING_PAYMENT';
+  totalAmount: number;
+  deliveryAddress: DeliveryAddress;
+  createdAt: string;
+  items: OrderItemResponse[];
+}
 
 export interface OrderDto {
   orderId: number;

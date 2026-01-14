@@ -3,20 +3,20 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError,of } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
-import { CreateOrderRequest, OrderResponse ,OrderDto,OrderResponseDto} from './orderModels';
+import { CreateOrderRequest, OrderResponse ,OrderDto,OrderResponseDto, OrderCreatedResponse} from './orderModels';
 
 const API_BASE = 'http://localhost:8080/restaurant-order';
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
   private http = inject(HttpClient);
-  private readonly baseUrl = `${API_BASE}/orders/user/1`;
+  private readonly baseUrl = `${API_BASE}/orders/user/3`;
 
   private readonly jsonHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
   });
 
-  createOrder(payload: CreateOrderRequest): Observable<OrderResponse> {
+  createOrder(payload: CreateOrderRequest): Observable<OrderCreatedResponse> {
     const idempotencyKey = this.generateIdempotencyKey();
     const headers = this.jsonHeaders.set('Idempotency-Key', idempotencyKey);
 
