@@ -32,7 +32,7 @@ export class RestaurantList implements OnDestroy {
 
   currentPage: number = 1;             // 1-based page index for UI
   pageSize: number = 51;               // default page size
-  pageSizeOptions: number[] = [51, 100, 200, 500, 1000]; // new
+  pageSizeOptions: number[] = [51, 100, 200, 500, 1000,2000]; // new
 
   totalPages: number = 0;
   totalElements: number = 0;
@@ -166,7 +166,7 @@ export class RestaurantList implements OnDestroy {
     this.fetchRestaurants();
   }
 
-  // 🔹 NEW: Page-size change handler
+  // NEW: Page-size change handler
   onPageSizeChange(size: number): void {
     this.pageSize = Number(size);
     // (Optional) Persist choice

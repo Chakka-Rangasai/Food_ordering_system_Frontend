@@ -17,11 +17,11 @@ export interface CartItem {
 export class CartService {
   // In-memory cart items (replace with backend later)
   private cartItems: CartItem[] = [
-    { restaurantId: 1, itemId: 103, name: "Veg Biryani", price: 220, quantity: 1, foodType: "Veg" },
-    { restaurantId: 1, itemId: 104, name: "Mutton Rogan Josh", price: 350, quantity: 1, foodType: "NonVeg" },
-    { restaurantId: 1, itemId: 105, name: "Butter Naan", price: 40, quantity: 4, foodType: "Veg" },
-    { restaurantId: 1, itemId: 106, name: "Paneer Tikka", price: 180, quantity: 2, foodType: "Veg" },
-    { restaurantId: 1, itemId: 107, name: "Fish Fry", price: 300, quantity: 1, foodType: "NonVeg" }
+    { restaurantId: 301, itemId: 103, name: "Veg Biryani", price: 220, quantity: 1, foodType: "Veg" },
+    { restaurantId: 301, itemId: 104, name: "Mutton Rogan Josh", price: 350, quantity: 1, foodType: "NonVeg" },
+    { restaurantId: 301, itemId: 105, name: "Butter Naan", price: 40, quantity: 4, foodType: "Veg" },
+    { restaurantId: 301, itemId: 106, name: "Paneer Tikka", price: 180, quantity: 2, foodType: "Veg" },
+    { restaurantId: 301, itemId: 107, name: "Fish Fry", price: 300, quantity: 1, foodType: "NonVeg" }
   ];
 
   // BehaviorSubject to hold cart count
