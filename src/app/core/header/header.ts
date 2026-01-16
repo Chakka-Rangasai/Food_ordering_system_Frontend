@@ -41,11 +41,15 @@ export class Header {
     this.isCollapsed = !this.isCollapsed;
   }
 
-  logout() {
+  logout(): void {
+  const confirmed = window.confirm('Are you sure you want to log out?');
+
+  if (confirmed) {
     this.userService.setLoginState(false);
     this.cartService.clearInternalCart();
     console.log('User logged out');
-    this.router.navigate(['/']);
     localStorage.removeItem('jwtToken');
+    this.router.navigate(['/']);
   }
+}
 }

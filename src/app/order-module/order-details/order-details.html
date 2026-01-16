@@ -2,54 +2,65 @@
   <!-- Back Button -->
   <button class="back-btn" (click)="back()">← Back</button>
 
+  <!-- Error Message -->
+  <div *ngIf="!loading && errorMessage" class="row min-vh-75">
+    <div class="col-12 d-flex justify-content-center align-items-center">
+      <div class="alert alert-danger text-center shadow-sm">
+        ⚠️ {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+
   <!-- Order Details -->
-  <div *ngIf="order; else notFound">
+  <div *ngIf="order && !errorMessage; else notFound">
     <!-- Header -->
     <header class="order-header">
       <h2>Order #{{ order.orderId }}</h2>
       <p class="sub"><strong>
         Ordered : {{ order.createdAt | date:'medium' }} • Status: {{ order.status }}
-      </strong>
-      </p>
+      </strong></p>
     </header>
-<hr>
+    <hr>
+
     <section class="section order-info">
-     <strong> <p>Status Updated At: {{ order.updatedAt | date:'medium' }}</p></strong>
+      <strong><p>Status Updated At: {{ order.updatedAt | date:'medium' }}</p></strong>
     </section>
 
     <!-- Timeline -->
     <section class="section status-timeline">
-  <h3>Order Progress</h3>
-  <div class="timeline">
-    <div
-      *ngFor="let step of timelineSteps(order); let i = index"
-      class="timeline-step"
-      [class.done]="step.done"
-    >
-      <div class="dot"></div>
-      <div class="label">{{ step.label }}</div>
-      <!-- connector line except for last step -->
-      <div class="connector" *ngIf="i < timelineSteps(order).length - 1"></div>
-    </div>
-  </div>
-</section>
+      <h3>Order Progress</h3>
+      <div class="timeline">
+        <div
+          *ngFor="let step of timelineSteps(order); let i = index"
+          class="timeline-step"
+          [class.done]="step.done"
+        >
+          <div class="dot"></div>
+          <div class="label">{{ step.label }}</div>
+          <div class="connector" *ngIf="i < timelineSteps(order).length - 1"></div>
+        </div>
+      </div>
+    </section>
+    <hr>
 
-<hr>
     <!-- Restaurant Info -->
     <section class="section restaurant-info">
       <h3><strong>{{ order.restaurantName }}</strong></h3>
       <p class="text-muted">📍 {{ order.restaurantLocation }}</p>
     </section>
-<hr>
+    <hr>
+
     <!-- Delivery Info -->
     <section class="section delivery-info">
-      <h3>Delivery Address</h3>
-      <p><strong>{{ order.deliveryAddress?.name }}</strong></p>
-      <p>{{ order.deliveryAddress?.phone }}</p>
-      <p>{{ order.deliveryAddress?.street }}</p>
-      <p>{{ order.deliveryAddress?.pincode }}</p>
+    <h3>Delivery Address</h3>
+    <p><strong>Receiver Name:</strong> {{ order.deliveryAddress?.name }}</p>
+    <p><strong>Contact Number:</strong> {{ order.deliveryAddress?.phone }}</p>
+    <p><strong>Street Address:</strong> {{ order.deliveryAddress?.street }}</p>
+    <p><strong>Postal Code:</strong> {{ order.deliveryAddress?.pincode }}</p>
     </section>
-<hr>
+
+    <hr>
+
     <!-- Items -->
     <section class="section items-info">
       <h3>Items</h3>
@@ -65,7 +76,6 @@
         </div>
       </div>
 
-
       <!-- Total -->
       <div class="total-row">
         <div>Total</div>
@@ -73,12 +83,10 @@
       </div>
       <hr>
     </section>
-
-    
   </div>
 
   <!-- Fallback -->
   <ng-template #notFound>
-    <p>Order not found.</p>
+    <p *ngIf="!errorMessage">Order not found.</p>
   </ng-template>
 </div>

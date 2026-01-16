@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class OrderDetailsComponent implements OnInit {
   order?: OrderResponseDto;
   loading = false;
+  errorMessage?: string; 
 
   constructor(
     private route: ActivatedRoute,
@@ -25,7 +26,7 @@ export class OrderDetailsComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.queryParamMap.get('id')); // expects ?id=123
     if (!id) {
-      console.warn('Order ID not provided in query params:', id);
+      this.errorMessage = 'Order ID not provided in query params.';
       return;
     }
 
@@ -34,11 +35,15 @@ export class OrderDetailsComponent implements OnInit {
       next: (o) => {
         this.order = o;
         this.loading = false;
+        this.errorMessage = undefined;
         this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('Failed to load order details', err);
         this.loading = false;
+        // backend sends {status, message}
+        this.errorMessage = err.error?.message || 'Something went wrong while fetching order.';
+        this.cdr.markForCheck();
       }
     });
   }
@@ -54,9 +59,6 @@ export class OrderDetailsComponent implements OnInit {
     );
   }
 
-  /**
-   * Build timeline steps based on order status
-   */
   timelineSteps(order: OrderResponseDto | undefined): { label: string; done: boolean }[] {
     if (!order) return [];
 
@@ -68,22 +70,11 @@ export class OrderDetailsComponent implements OnInit {
     ];
 
     switch (order.status) {
-      case 'PLACED':
-        // only first step done
-        break;
-      case 'PREPARING':
-        steps[1].done = true;
-        break;
-      case 'OUT_FOR_DELIVERY':
-        steps[1].done = true;
-        steps[2].done = true;
-        break;
-      case 'DELIVERED':
-        steps.forEach(step => (step.done = true));
-        break;
-      default:
-        console.warn('Unknown order status:', order.status);
-        break;
+      case 'PLACED': break;
+      case 'PREPARING': steps[1].done = true; break;
+      case 'OUT_FOR_DELIVERY': steps[1].done = true; steps[2].done = true; break;
+      case 'DELIVERED': steps.forEach(step => (step.done = true)); break;
+      default: console.warn('Unknown order status:', order.status); break;
     }
 
     return steps;

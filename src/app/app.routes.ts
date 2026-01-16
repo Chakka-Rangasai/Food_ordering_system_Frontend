@@ -10,28 +10,30 @@ import { Orders } from './order-module/orders/orders';
 import { Cart } from './order-module/cart/cart';
 import { OrderSuccessComponent } from './order-module/order-sucess/order-sucess';
 import { OrderDetailsComponent } from './order-module/order-details/order-details';
+import { AuthGuard } from './auth.guard';
+import { GuestGuard } from './GuestGuard';
 
 
 export const routes: Routes = [
-    { path:'',component:Landing},
-    { path:'register',component:UserRegister},
-    { path:'login',component:UserLogin},
-    { path:'restaurantlist',component:RestaurantList},
+    { path:'',component:Landing, canActivate:[GuestGuard]},
+    { path:'register',component:UserRegister, canActivate:[GuestGuard]},
+    { path:'login',component:UserLogin, canActivate:[GuestGuard]},
+    { path:'restaurantlist',component:RestaurantList,canActivate:[AuthGuard]},
     {
-        path:'restaurantdetails',component:RestaurantMenuList
+        path:'restaurantdetails',component:RestaurantMenuList,canActivate:[AuthGuard]
     },
     
      {
-        path:'ordersdetails',component:OrderDetailsComponent
+        path:'ordersdetails',component:OrderDetailsComponent,canActivate:[AuthGuard]
     },
     
     {
-        path:'orders',component:Orders
+        path:'orders',component:Orders,canActivate:[AuthGuard]
     },
     {
-        path:'cart',component:Cart
+        path:'cart',component:Cart,canActivate:[AuthGuard]
     },
     {
-        path:'order-success',component:OrderSuccessComponent
+        path:'order-success',component:OrderSuccessComponent,canActivate:[AuthGuard]
     }
 ];
