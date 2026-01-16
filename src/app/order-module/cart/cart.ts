@@ -154,7 +154,6 @@ const key = getOrCreateIdempotencyKey('create-order');
           verticalPosition: 'top'
         });
         this.isPlacing = false;
-        this.snackBar.open(`❌ Failed to place order: ${err.message}`, 'Close', { duration: 9000, verticalPosition: 'top' });
       },
       complete: () => {
         this.isPlacing = false;

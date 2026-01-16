@@ -1,21 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams,HttpHeaders  } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment';
 @Injectable({ providedIn: 'root' })
 export class RestaurantsService {
-  
-
-
-  // This the url with no api gateway 
-  // private readonly baseUrl = `http://localhost:8089/restaurants`;
+  constructor(private http: HttpClient) {}
 
 // This is the url with the api gateway integration
-private readonly baseUrl = `http://localhost:8080/restaurant-api/restaurants`;
+private readonly baseUrl = `${environment.apiUrl}/restaurant-api/restaurants`;
 
-
-  private readonly secondUrl =  'http://localhost:8080/restaurant-api/api/menuitems';
-
-  constructor(private http: HttpClient) {}
+private readonly secondUrl =  `${environment.apiUrl}/restaurant-api/api/menuitems`;
 
   getRestaurants(opts: {
     search?: string;                  // optional
@@ -45,8 +39,4 @@ getRestaurantById(restaurantId: number): Observable<any> {
   return this.http.get<any>(`${this.secondUrl}/${restaurantId}`);
 }
 
-
-// getToken(): string | null {
-//   return localStorage.getItem('jwtToken');
-//   }
 }

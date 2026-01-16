@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environment';
 export interface CartItem {
   id?: number;
   restaurantId: number;
@@ -18,7 +19,8 @@ export class CartService {
   private cartItems: CartItem[] = [];
   private cartCountSubject = new BehaviorSubject<number>(0);
   cartCount$ = this.cartCountSubject.asObservable();
-  private apiUrl = 'http://localhost:8080/cart-api/cart';
+  private readonly apiUrl = `${environment.apiUrl}/cart-api/cart`;
+
   constructor(private http: HttpClient) {} 
   addToCart(item: CartItem): Observable<CartItem> {
     return this.http.post<CartItem>(`${this.apiUrl}/add`, item).pipe(
