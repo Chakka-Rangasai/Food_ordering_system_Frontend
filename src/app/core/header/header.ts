@@ -34,6 +34,10 @@ export class Header {
 
     this.userService.isLoggedIn$.subscribe(state => {
       this.isLoggedIn = state;
+      if (state) {
+        // When logged in refresh cart count from backend and upadte in the ui.
+        this.cartService.refreshCartCount();
+      }
     });
   }
 
@@ -42,14 +46,13 @@ export class Header {
   }
 
   logout(): void {
-  const confirmed = window.confirm('Are you sure you want to log out?');
-
-  if (confirmed) {
-    this.userService.setLoginState(false);
-    this.cartService.clearInternalCart();
-    console.log('User logged out');
-    localStorage.removeItem('jwtToken');
-    this.router.navigate(['/']);
+    const confirmed = window.confirm('Are you sure you want to log out?');
+    if (confirmed) {
+      this.userService.setLoginState(false);
+      this.cartService.clearInternalCart();
+      console.log('User logged out');
+      localStorage.removeItem('jwtToken');
+      this.router.navigate(['/']);
+    }
   }
-}
 }

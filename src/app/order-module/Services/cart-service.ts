@@ -63,4 +63,17 @@ export class CartService {
   this.cartItems = [];
   this.cartCountSubject.next(0); 
 }
+
+refreshCartCount(): void {
+    this.getCart().subscribe(items => {
+      const count = items.reduce((sum, item) => sum + item.quantity, 0);
+      this.cartCountSubject.next(count);
+    });
+  }
+
 }
+
+
+
+
+
