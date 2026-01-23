@@ -34,11 +34,7 @@
     <div class="footer">
       <div class="row">
         <span>Total Amount:</span>
-        <strong>₹{{ o.totalAmount | number:'1.2-2' }}</strong>
-      </div>
-      <div class="row" *ngIf="o.idempotencyKey">
-        <span>Idempotency Key:</span>
-        <code>{{ o.idempotencyKey }}</code>
+        <strong class="price">₹{{ o.totalAmount | number:'1.2-2' }}</strong>
       </div>
     </div>
   </div>
